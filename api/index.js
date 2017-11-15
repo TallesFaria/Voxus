@@ -25,28 +25,27 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./routes/authRoutes')(app);
-require('./routes/userRoutes')(app);
+require('./routes/tasksRoutes')(app);
 app.get('/', (req, res) => {
   let adminContent = `
     <div>
       You don't appear to be logged in.  You can log in by visiting
-      <a href="/auth/google">the Authentication Route</a>. You could
-      also look at details about yourself at <a href="/current_user">the Current User route</a>
+      <a href="/auth/google">the Authentication Route</a>
     </div>
   `;
   if (req.user) {
     adminContent = `
       <div>
-        You appear to be logged in, so you can visit <a href="/admins">the Admins route</a>
+        You appear to be logged in, so you can visit <a href="/tasks">the Tasks route</a>
         or you can <a href="/logout">Logout</a>.
       </div>
     `;
   }
   res.send(`
     <div>
-      <h4>Hi!  Welcome to the React SSR API</h4>
+      <h4>Hi!  Welcome to the Voxus Tasks Manager API</h4>
       <div>
-        You can see <a href="/users">the Users route</a>
+        You can see the tasks <a href="/tasks"> in the Tasks route</a>
       </div>
       ${adminContent}
     </div>
