@@ -1,2 +1,3 @@
-export const FETCH_TASKS = 'fetch_users';
-export const FETCH_CURRENT_USER = 'fetch_current_user';
+export const FETCH_TASKS = 'FETCH_TASKS';
+export const FETCH_CURRENT_USER = 'FETCH_CURRENT_USER';
+export const CREATE_TASK = 'CREATE_TASK';

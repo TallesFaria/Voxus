@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchTasks } from '../actions';
-import { Helmet } from 'react-helmet';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { fetchTasks, createTask } from "../actions";
+import { Helmet } from "react-helmet";
+import CreateTask from "../components/CreateTask";
+import Task from "../components/Task";
 
 class HomePage extends Component {
   componentDidMount() {
@@ -9,9 +11,14 @@ class HomePage extends Component {
   }
 
   renderTasks() {
-    return this.props.tasks.map(task => {
-      return <li key={task.id}>{task.name}</li>;
-    });
+    console.log("===========Render tasks======================");
+    console.log(this.props);
+    console.log("====================================");
+    if (this.props.tasks.data) {
+      return this.props.tasks.data.map(task => {
+        return <Task task={task} key={task.id} />
+      });
+    }
   }
 
   head() {
@@ -23,10 +30,17 @@ class HomePage extends Component {
     );
   }
 
+  handleSubmit(values) {
+    console.log("===============SUBMIT=================");
+    console.log(values);
+    console.log("====================================");
+  }
+
   render() {
     return (
-      <div>
+      <div className="container">
         {this.head()}
+        <CreateTask handleSubmit={this.handleSubmit.bind(this)} />
         Here's a big list of tasks:
         <ul>{this.renderTasks()}</ul>
       </div>
@@ -35,7 +49,7 @@ class HomePage extends Component {
 }
 
 function mapStateToProps(state) {
-  return { tasks: state.tasks };
+  return { tasks: state.tasks, auth: state.auth };
 }
 
 function loadData(store) {
@@ -44,5 +58,5 @@ function loadData(store) {
 
 export default {
   loadData,
-  component: connect(mapStateToProps, { fetchTasks })(HomePage)
+  component: connect(mapStateToProps, { fetchTasks, createTask })(HomePage)
 };
