@@ -11,9 +11,6 @@ class HomePage extends Component {
   }
 
   renderTasks() {
-    console.log("===========Render tasks======================");
-    console.log(this.props);
-    console.log("====================================");
     if (this.props.tasks.data) {
       return this.props.tasks.data.map(task => {
         return <Task task={task} key={task.id} />
