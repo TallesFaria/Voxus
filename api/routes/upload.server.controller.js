@@ -3,6 +3,7 @@ const async = require("async");
 const bucketName = "voxustasksmanager";
 const path = require("path");
 const fs = require("fs");
+const ElasticClient = require("../config/ElasticClient");
 let pathParams, image, imageName;
 
 /** Load Config File */
@@ -53,12 +54,6 @@ const createItemObject = callback => {
 exports.upload = (req, res, next) => {
   const file = req.body.file; // file passed from client
   const meta = req.body;
-  console.log("===========FIle======================");
-  console.log(file);
-  console.log("====================================");
-  console.log("===========Mwr======================");
-  console.log(meta);
-  console.log("====================================");
 
   var tmp_path = req.body.file.path;
   // console.log("item", req.body.file)
@@ -66,9 +61,24 @@ exports.upload = (req, res, next) => {
   // image = fs.createReadStream(file);
   image = file;
   imageName = meta.name;
+  id = meta.id;
+  console.log(id);
   async.series([createMainBucket, createItemObject], (err, result) => {
     if (err) return res.send(err);
-    else return res.json({ message: "Successfully uploaded" });
+    // ElasticClient.index(
+    //   {
+    //     index: "tasks",
+    //     type: "task",
+    //     id: id,
+    //     body: {
+    //       files: 'https://voxustasksmanager.s3.amazonaws.com/voxustasksmanager/imageName'
+    //     }
+    //   },
+    //   function(err, resp, status) {
+    //     console.log(resp);
+    //   }
+    // );
+    return res.json({ message: 'File uploaded successfuly'} );
   });
 };
 

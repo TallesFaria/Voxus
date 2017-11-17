@@ -12,7 +12,8 @@ class Task extends Component {
     e.preventDefault();
     this.props.uploadDocumentRequest({
       file: e.target.files[0],
-      name: e.target.files[0].name
+      name: e.target.files[0].name,
+      id: this.props.id
     });
 
     // this.props.uploadDocumentRequest(e.target.files);
