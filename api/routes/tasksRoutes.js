@@ -30,6 +30,9 @@ module.exports = app => {
   });
 
   app.post('/new-task', (req, res) => {
+    console.log('=============CREATE TASK====================');
+    console.log(req.body);
+    console.log('====================================');
     ElasticClient.create(
       {
         index: 'tasks',

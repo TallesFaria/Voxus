@@ -41866,16 +41866,13 @@ var fetchTask = exports.fetchTask = function fetchTask(id) {
                 id: id
               };
 
-              console.log('=============ACTIon====================');
-              console.log(task);
-              console.log('====================================');
 
               dispatch({
                 type: _types.FETCH_TASK,
                 payload: task
               });
 
-            case 9:
+            case 6:
             case 'end':
               return _context2.stop();
           }
@@ -41898,13 +41895,16 @@ var createTask = exports.createTask = function createTask(task) {
           switch (_context3.prev = _context3.next) {
             case 0:
               _context3.next = 2;
-              return api.post('/new-task', _extends({}, task, {
-                isTask: true,
-                done: false
-              }));
+              return api.post('/new-task', _extends({}, task));
 
             case 2:
               res = _context3.sent;
+
+
+              console.log('==============CREATE==================');
+              console.log(res);
+              console.log('====================================');
+
               addedTask = {
                 name: task.taskName || '',
                 description: task.description || '',
@@ -41920,7 +41920,7 @@ var createTask = exports.createTask = function createTask(task) {
                 payload: addedTask
               });
 
-            case 5:
+            case 8:
             case 'end':
               return _context3.stop();
           }

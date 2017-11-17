@@ -1,12 +1,13 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cookieSession = require("cookie-session");
-const passport = require("passport");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const keys = require("./config/keys");
-require("./models/User");
-require("./services/passport");
+const express = require('express');
+const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const keys = require('./config/keys');
+require('./models/User');
+require('./services/passport');
+const ElasticClient = require('./config/ElasticClient');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(keys.mongoURI);
@@ -24,9 +25,22 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-require("./routes/authRoutes")(app);
-require("./routes/tasksRoutes")(app);
-app.get("/", (req, res) => {
+ElasticClient.indices.create(
+  {
+    index: 'tasks'
+  },
+  function(err, resp, status) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('create', resp);
+    }
+  }
+);
+
+require('./routes/authRoutes')(app);
+require('./routes/tasksRoutes')(app);
+app.get('/', (req, res) => {
   let adminContent = `
     <div>
       You don't appear to be logged in.  You can log in by visiting

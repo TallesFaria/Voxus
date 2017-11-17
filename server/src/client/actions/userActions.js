@@ -47,9 +47,6 @@ export const fetchTask = id => async (dispatch, getState, api) => {
     files: data._source.files || [],
     id
   };
-  console.log('=============ACTIon====================');
-  console.log(task);
-  console.log('====================================');
 
   dispatch({
     type: FETCH_TASK,
@@ -59,10 +56,12 @@ export const fetchTask = id => async (dispatch, getState, api) => {
 
 export const createTask = task => async (dispatch, getState, api) => {
   const res = await api.post('/new-task', {
-    ...task,
-    isTask: true,
-    done: false
+    ...task
   });
+
+  console.log('==============CREATE==================');
+  console.log(res);
+  console.log('====================================');
 
   const addedTask = {
     name: task.taskName || '',
