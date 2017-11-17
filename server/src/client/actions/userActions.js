@@ -76,20 +76,6 @@ export const done = (id, done) => async (dispatch, getState, api) => {
   // });
 };
 
-export const uploadSuccess = ({ data }) => {
-  return {
-    type: UPLOAD_DOCUMENT_SUCCESS,
-    payload: data
-  };
-};
-
-export const uploadFail = error => {
-  return {
-    type: UPLOAD_DOCUMENT_FAIL,
-    payload: error
-  };
-};
-
 export const uploadDocumentRequest = ({ file, name }) => async (dispatch, getState, api) => {
   let data = new FormData();
   data.append("file", document);
@@ -98,13 +84,21 @@ export const uploadDocumentRequest = ({ file, name }) => async (dispatch, getSta
 
   try{
     res =  await api.post("/upload", data)
+    console.log('====================================');
+    console.log(res);
+    console.log('====================================');
+    return {
+      type: UPLOAD_DOCUMENT_SUCCESS,
+      payload: data
+    };
   } catch(error) {
-    dispatch(uploadFail(error))
+    return {
+      type: UPLOAD_DOCUMENT_FAIL,
+      payload: error
+    };
   }
 
-  console.log('====================================');
-  console.log(res);
-  console.log('====================================');
+
 
 };
 

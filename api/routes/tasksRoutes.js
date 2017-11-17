@@ -8,6 +8,9 @@ const multipartMiddleware = multipart()
 
 module.exports = app => {
   app.get("/tasks", (req, res) => {
+    console.log('=============FETCH TASKS===================')
+    console.log(req.body)
+    console.log('====================================')
     ElasticClient.search(
       {
         index: "tasks",

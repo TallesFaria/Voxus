@@ -1,11 +1,15 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   updateTask,
   deleteTask,
   done,
   uploadDocumentRequest
-} from "../actions";
+} from '../actions';
+import {
+  UPLOAD_DOCUMENT_SUCCESS,
+  UPLOAD_DOCUMENT_FAIL
+} from '../actions/types';
 
 class Task extends Component {
   handleFileUpload(e) {
@@ -17,6 +21,14 @@ class Task extends Component {
     });
 
     // this.props.uploadDocumentRequest(e.target.files);
+  }
+
+  uploadFile() {
+    if (this.props.upload === UPLOAD_DOCUMENT_SUCCESS)
+      return <div>Upload successfull</div>;
+    if (this.props.upload === UPLOAD_DOCUMENT_FAIL)
+      return <div>Upload failed</div>;
+    return <div />;
   }
 
   render() {
@@ -47,6 +59,7 @@ class Task extends Component {
         <button className="btn">
           <input type="file" onChange={this.handleFileUpload.bind(this)} />
         </button>
+        {this.uploadFile()}
 
         <button className="btn red" onClick={() => deleteTask(id)}>
           <i className="material-icons">delete_forever</i>
@@ -56,7 +69,11 @@ class Task extends Component {
   }
 }
 
-export default connect(null, {
+function mapStateToProps(state) {
+  return { upload: state.upload };
+}
+
+export default connect(mapStateToProps, {
   updateTask,
   deleteTask,
   done,
