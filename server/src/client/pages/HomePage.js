@@ -10,10 +10,14 @@ class HomePage extends Component {
     this.props.fetchTasks();
   }
 
+  // componentWillReceiveProps(nextProps) {
+    
+  // }
+
   renderTasks() {
     if (this.props.tasks.data) {
       return this.props.tasks.data.map(task => {
-        return <Task task={task} key={task.id} />
+        return <Task task={task._source} id={task._id} key={task._id} />;
       });
     }
   }
@@ -38,7 +42,7 @@ class HomePage extends Component {
       <div className="container">
         {this.head()}
         <CreateTask handleSubmit={this.handleSubmit.bind(this)} />
-        Here's a big list of tasks:
+        <h2>List of Tasks:</h2>
         <ul>{this.renderTasks()}</ul>
       </div>
     );

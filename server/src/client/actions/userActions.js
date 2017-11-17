@@ -11,22 +11,22 @@ import {
 export const fetchTasks = () => async (dispatch, getState, api) => {
   const res = await api.get("/tasks");
   console.log('==============FETCH TASKS RES===================');
-  console.log(res);
+  console.log(res.data.hits);
   console.log('====================================');
-  // dispatch({
-  //   type: FETCH_TASKS,
-  //   payload: res
-  // });
+  dispatch({
+    type: FETCH_TASKS,
+    payload: res.data.hits
+  });
 };
 
 export const createTask = task => async (dispatch, getState, api) => {
   console.log(task);
-  const res = await api.post("/new-task", task);
-
-  // dispatch({
-  //   type: CREATE_TASK,
-  //   payload: res
-  // });
+  const res1 = await api.post("/new-task", {...task, isTask: true, done: false });
+  const res = await api.get("/tasks");
+  dispatch({
+    type: FETCH_TASKS,
+    payload: res.data.hits
+  });
 };
 
 export const deleteTask = id => async (dispatch, getState, api) => {
@@ -59,9 +59,9 @@ export const uploadFiles = file => async (dispatch, getState, api) => {
   // });
 };
 
-export const done = id => async (dispatch, getState, api) => {
+export const done = (id, done) => async (dispatch, getState, api) => {
   console.log(id);
-  const res = await api.post("/done", done);
+  const res = await api.post("/done", !done);
 
   // dispatch({
   //   type: DONE,

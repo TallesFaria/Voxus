@@ -41633,6 +41633,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.fetchCurrentUser = exports.done = exports.uploadFiles = exports.updateTask = exports.deleteTask = exports.createTask = exports.fetchTasks = undefined;
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _types = __webpack_require__(141);
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -41652,14 +41654,14 @@ var fetchTasks = exports.fetchTasks = function fetchTasks() {
               res = _context.sent;
 
               console.log('==============FETCH TASKS RES===================');
-              console.log(res);
+              console.log(res.data.hits);
               console.log('====================================');
-              // dispatch({
-              //   type: FETCH_TASKS,
-              //   payload: res
-              // });
+              dispatch({
+                type: _types.FETCH_TASKS,
+                payload: res.data.hits
+              });
 
-            case 6:
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -41676,19 +41678,29 @@ var fetchTasks = exports.fetchTasks = function fetchTasks() {
 var createTask = exports.createTask = function createTask(task) {
   return function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(dispatch, getState, api) {
-      var res;
+      var res1, res;
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               console.log(task);
               _context2.next = 3;
-              return api.post("/new-task", task);
+              return api.post("/new-task", _extends({}, task, { isTask: true, done: false }));
 
             case 3:
+              res1 = _context2.sent;
+              _context2.next = 6;
+              return api.get("/tasks");
+
+            case 6:
               res = _context2.sent;
 
-            case 4:
+              dispatch({
+                type: _types.FETCH_TASKS,
+                payload: res.data.hits
+              });
+
+            case 8:
             case "end":
               return _context2.stop();
           }
@@ -41789,7 +41801,7 @@ var uploadFiles = exports.uploadFiles = function uploadFiles(file) {
   }();
 };
 
-var done = exports.done = function done(id) {
+var done = exports.done = function done(id, _done) {
   return function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(dispatch, getState, api) {
       var res;
@@ -41799,7 +41811,7 @@ var done = exports.done = function done(id) {
             case 0:
               console.log(id);
               _context6.next = 3;
-              return api.post("/done", done);
+              return api.post("/done", !_done);
 
             case 3:
               res = _context6.sent;
@@ -41905,12 +41917,17 @@ var HomePage = function (_Component) {
     value: function componentDidMount() {
       this.props.fetchTasks();
     }
+
+    // componentWillReceiveProps(nextProps) {
+
+    // }
+
   }, {
     key: "renderTasks",
     value: function renderTasks() {
       if (this.props.tasks.data) {
         return this.props.tasks.data.map(function (task) {
-          return _react2.default.createElement(_Task2.default, { task: task, key: task.id });
+          return _react2.default.createElement(_Task2.default, { task: task._source, id: task._id, key: task._id });
         });
       }
     }
@@ -41943,7 +41960,11 @@ var HomePage = function (_Component) {
         { className: "container" },
         this.head(),
         _react2.default.createElement(_CreateTask2.default, { handleSubmit: this.handleSubmit.bind(this) }),
-        "Here's a big list of tasks:",
+        _react2.default.createElement(
+          "h2",
+          null,
+          "List of Tasks:"
+        ),
         _react2.default.createElement(
           "ul",
           null,
@@ -43218,7 +43239,8 @@ var CreateTask = function (_Component) {
 
     _this.state = {
       taskName: "",
-      description: ""
+      description: "",
+      priority: 0
     };
 
     _this.handleChange = _this.handleChange.bind(_this);
@@ -43293,6 +43315,19 @@ var CreateTask = function (_Component) {
             ),
             _react2.default.createElement(
               "div",
+              null,
+              _react2.default.createElement("br", null),
+              _react2.default.createElement("input", {
+                type: "text",
+                className: "form-control",
+                name: "priority",
+                value: this.state.priority,
+                onChange: this.handleChange,
+                placeholder: "priority"
+              })
+            ),
+            _react2.default.createElement(
+              "div",
               { className: "form-group" },
               _react2.default.createElement(
                 "button",
@@ -43328,6 +43363,10 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = __webpack_require__(35);
+
+var _actions = __webpack_require__(140);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43348,30 +43387,55 @@ var Task = function (_Component) {
   _createClass(Task, [{
     key: "render",
     value: function render() {
-      var task = this.props.task;
+      var _props = this.props,
+          task = _props.task,
+          id = _props.id,
+          done = _props.done,
+          updateTask = _props.updateTask,
+          deleteTask = _props.deleteTask;
 
       return _react2.default.createElement(
         "div",
-        { key: task.id, className: "horizontal" },
+        { key: id, className: "horizontal" },
         _react2.default.createElement("br", null),
         task.done ? _react2.default.createElement(
-          "h6",
-          null,
+          "button",
+          { className: "btn", onClick: function onClick() {
+              return done(id, task.done);
+            } },
           _react2.default.createElement(
-            "del",
+            "h6",
             null,
-            task.taskName
+            _react2.default.createElement(
+              "del",
+              null,
+              task.name
+            )
           )
         ) : _react2.default.createElement(
-          "h6",
-          null,
-          task.taskName
+          "button",
+          { className: "btn", onClick: function onClick() {
+              return done(id, task.done);
+            } },
+          _react2.default.createElement(
+            "h6",
+            null,
+            task.name
+          )
         ),
+        _react2.default.createElement("hr", null),
+        _react2.default.createElement("br", null),
         _react2.default.createElement(
           "li",
           null,
           task.description
         ),
+        _react2.default.createElement(
+          "li",
+          null,
+          task.priority
+        ),
+        _react2.default.createElement("br", null),
         _react2.default.createElement(
           "button",
           { className: "btn" },
@@ -43392,7 +43456,9 @@ var Task = function (_Component) {
         ),
         _react2.default.createElement(
           "button",
-          { className: "btn red" },
+          { className: "btn red", onClick: function onClick() {
+              return deleteTask(id);
+            } },
           _react2.default.createElement(
             "i",
             { className: "material-icons" },
@@ -43406,7 +43472,7 @@ var Task = function (_Component) {
   return Task;
 }(_react.Component);
 
-exports.default = Task;
+exports.default = (0, _reactRedux.connect)(null, { updateTask: _actions.updateTask, deleteTask: _actions.deleteTask, done: _actions.done })(Task);
 
 /***/ }),
 /* 555 */
@@ -51760,7 +51826,7 @@ exports.default = function () {
 
   switch (action.type) {
     case _types.FETCH_TASKS:
-      var tasks = action.payload.data;
+      var tasks = action.payload;
       return _extends({}, state, { data: tasks });
     default:
       return state;

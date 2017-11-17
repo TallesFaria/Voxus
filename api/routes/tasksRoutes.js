@@ -10,7 +10,7 @@ module.exports = app => {
         type: "task",
         body: {
           query: {
-            match_all: {}
+            match: { isTask: true }
           }
         }
       },
@@ -18,13 +18,13 @@ module.exports = app => {
         if (error) {
           console.log("search error: " + error);
         } else {
-          console.log("--- Response ---");
-          console.log(response);
-          console.log("--- Hits ---");
-          response.hits.hits.forEach(function(hit) {
-            console.log(hit);
-          });
-          res.send(response.hits)
+          // console.log("--- Response ---");
+          // console.log(response);
+          // console.log("--- Hits ---");
+          // response.hits.hits.forEach(function(hit) {
+          //   console.log(hit);
+          // });
+          res.send(response.hits);
         }
       }
     );
@@ -34,7 +34,7 @@ module.exports = app => {
     //     type: "task",
     //     body: {
     //       size: 20,
-    //       query: { 
+    //       query: {
     //         match_all: {}
     //       }
     //     }
@@ -52,15 +52,15 @@ module.exports = app => {
         type: "task",
         body: {
           name: req.body.taskName,
-          description: req.body.description
+          description: req.body.description,
+          isTask: req.body.isTask
         }
       },
       function(err, resp, status) {
         console.log(resp);
+        res.send(resp);
       }
     );
-
-    res.send("Success");
   });
 
   app.delete("/delete", (req, res) => {
@@ -144,51 +144,3 @@ module.exports = app => {
   //   res.send(tasks);
   // });
 };
-
-const tasks = [
-  {
-    id: 1,
-    taskName: "Leanne Graham",
-    description: "dfabsdfbkak",
-    anexos: [],
-    priority: 2,
-    submittedByUser: "Joao",
-    done: false
-  },
-  {
-    id: 2,
-    taskName: "Ervin Howell",
-    description: "dfabsdfbkak",
-    anexos: [],
-    priority: 2,
-    submittedByUser: "Joao",
-    done: false
-  },
-  {
-    id: 3,
-    taskName: "Clementine Bauch",
-    description: "dfabsdfbkak",
-    anexos: [],
-    priority: 2,
-    submittedByUser: "Joao",
-    done: false
-  },
-  {
-    id: 4,
-    taskName: "Patricia Lebsack",
-    description: "dfabsdfbkak",
-    anexos: [],
-    priority: 2,
-    submittedByUser: "Joao",
-    done: false
-  },
-  {
-    id: 5,
-    taskName: "Chelsey Dietrich",
-    description: "dfabsdfbkak",
-    anexos: [],
-    priority: 2,
-    submittedByUser: "Joao",
-    done: false
-  }
-];

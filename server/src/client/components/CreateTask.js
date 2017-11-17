@@ -8,7 +8,8 @@ class CreateTask extends Component {
 
     this.state = {
       taskName: "",
-      description: ""
+      description: "",
+      priority: 0
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -57,6 +58,18 @@ class CreateTask extends Component {
                 value={this.state.description}
                 onChange={this.handleChange}
                 placeholder="description"
+              />
+            </div>
+            <div>
+              {/* <label htmlFor="description">Task description</label> */}
+              <br />
+              <input
+                type="text"
+                className="form-control"
+                name="priority"
+                value={this.state.priority}
+                onChange={this.handleChange}
+                placeholder="priority"
               />
             </div>
             <div className="form-group">
