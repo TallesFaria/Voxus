@@ -1,140 +1,46 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { editTask, fetchTask } from '../actions';
+import FormTask from '../components/FormTask';
 
 class EditPage extends Component {
-  getInitialState() {
-    return {
-      todos: [{ task: 'Item 1' }],
-      editorText: '',
-      itemBeingEdited: 2
-    };
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  textBeingEdited() {
-    let store = this.state;
-    let x = store.todos[store.itemBeingEdited];
-    return x ? x.task : '';
+  componentDidMount() {
+    this.props.fetchTask(this.props.match.params.id);
   }
 
-  buttonText() {
-    let store = this.state;
-    return store.itemBeingEdited < store.todos.length ? 'Save' : 'Add';
-  }
+  handleSubmit(e) {
+    e.preventDefault();
 
-  editorIsEmpty() {
-    let store = this.state;
-    return store.editorText === '';
-  }
-
-  onAddItem() {
-    let store = this.state;
-    if (state.itemBeingEdited > state.todos.length) {
-      console.log('Adding');
-      this.setState({
-        todos: store.todos.push({ task: this.editorText }),
-        itemBeingEdited: store.itemBeingEdited + 1,
-        editorText: ''
-      });
-    } else {
-      console.log('Saving');
-      store.todos[store.itemBeingEdited].tast = store.editorText;
-      this.setState({
-        todos: store.todos,
-        editorText: '',
-        itemBeingEdited: store.todos.length + 1
-      });
-    }
-  }
-
-  onDeleteItem(i) {
-    let store = this.state;
-    store.todos.splice(i, 1);
-    if (store.itemBeingEdited === i) {
-      this.setState({
-        itemBeingEdited: store.todos.length + 1,
-        editorText: '',
-        todos: todos
-      });
-    }
-  }
-
-  onEditItem(i) {
-    let store = this.state;
-    this.setState({
-      itemBeingEdited: i,
-      editorText: this.textBeingEdited()
-    });
+    this.props.editTask(this.state);
   }
 
   render() {
-    let store = this.state;
-    return (
-      <div>
-        <TextEditor store={store} />
-        <ListGroup store={store} />
-      </div>
-    );
+    if (this.props.task) {
+      return <FormTask task={this.props.task} onSubmit={this.handleSubmit} />;
+    }
+    return <div />;
   }
 }
 
-const ListItem = props => {
-  console.log('Rendering ListItem');
-  return (
-    <li className="list-group-item clearfix constraint">
-      <span className="pull-left">{props.todo.task}</span>
-      <span className="pull-right">
-        <div className="btn-group">
-          <button
-            className="btn btn-danger btn-xs delete"
-            onClick={props.deleteItem}
-          >
-            x
-          </button>
-          <button
-            className="btn btn-success btn-xs edit"
-            onClick={props.editItem}
-          >
-            -
-          </button>
-        </div>
-      </span>
-    </li>
-  );
-};
+function mapStateToProps(state) {
+  return { task: state.task };
+}
 
-const ListGroup = ({ store }) => {
-  console.log('Rendering ListGroup');
-  const listItem = (d, i) => (
-    <ListItem
-      key={i}
-      todo={d}
-      deleteItem={e => store.onDeleteItem(i)}
-      editItem={e => store.onEditItem(i)}
-    />
-  );
-  return <ul className="list-group">{store.todos.map(listItem)}</ul>;
-};
-
-const TextEditor = ({ store }) => {
-  console.log('Rendering TextEditor');
-  return (
-    <div className="editor">
-      <h4>Constraint Editor</h4>
-      <textarea
-        className="form-control"
-        value={store.editorText}
-        onChange={e => (store.editorText = e.target.value)}
-      />
-      <button
-        className="btn btn-default btn-sm"
-        onClick={store.onAddItem.bind(store)}
-        disabled={store.editorIsEmpty}
-      >
-        {store.buttonText}
-      </button>
-    </div>
-  );
-};
+function loadData(store, path) {
+  const id = path.slice(0, 5);
+  console.log('================ID=================');
+  console.log(id);
+  console.log('====================================');
+  return store.dispatch(fetchTask(id));
+}
 
 export default {
-  component: EditPage
+  loadData,
+  component: connect(null, { editTask, fetchTask })(EditPage),
 };

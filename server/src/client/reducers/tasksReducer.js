@@ -7,12 +7,6 @@ export default (state = [], action) => {
     case CREATE_TASK:
       return [...state, action.payload];
     case DELETE_TASK:
-      console.log('==============AFTER DELETION===================', action.payload);
-      console.log([
-        ...state.slice(0, action.payload),
-        ...state.slice(action.payload + 1)
-      ]);
-      console.log('====================================');
       return [
         ...state.slice(0, action.payload),
         ...state.slice(action.payload + 1)

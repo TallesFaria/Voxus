@@ -20,8 +20,6 @@ class Task extends Component {
       name: e.target.files[0].name,
       id: this.props.id
     });
-
-    // this.props.uploadDocumentRequest(e.target.files);
   }
 
   uploadFile() {
@@ -46,7 +44,7 @@ class Task extends Component {
         <br />
         {done ? (
           <button className="btn" onClick={() => isDone(id, done)}>
-            <h6>
+           <h6>
               <del>{name}</del>
             </h6>
           </button>
@@ -66,7 +64,10 @@ class Task extends Component {
           <input type="file" onChange={this.handleFileUpload.bind(this)} />
         </button>
         {this.uploadFile()}
-
+        <br />
+        <Link className="btn" to={`/edit/${id}`}>
+          <i className="material-icons">edit</i>
+        </Link>
         <button className="btn red" onClick={() => deleteTask(i)}>
           <i className="material-icons">delete_forever</i>
         </button>

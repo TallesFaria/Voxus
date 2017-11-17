@@ -70,6 +70,23 @@ module.exports = app => {
     );
   });
 
+  app.post("/fetch-task", (req, res) => {
+    console.log('============ID==================');
+    console.log(req.body);
+    console.log('====================================');
+    ElasticClient.get(
+      {
+        index: "tasks",
+        type: "task",
+        id: req.body.id
+      },
+      function(err, resp, status) {
+        console.log(resp);
+        res.send(resp);
+      }
+    );
+  });
+
   app.delete("/delete", (req, res) => {
     ElasticClient.indices.delete(
       {

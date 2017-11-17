@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   FETCH_CURRENT_USER,
   FETCH_TASKS,
+  FETCH_TASK,
   CREATE_TASK,
   DELETE_TASK,
   UPDATE_TASK,
@@ -25,12 +26,31 @@ export const fetchTasks = () => async (dispatch, getState, api) => {
       id: task._id
     })
   );
-  console.log('====================================')
-  console.log(tasksList)
-  console.log('====================================')
+  console.log('====================================');
+  console.log(tasksList);
+  console.log('====================================');
   dispatch({
     type: FETCH_TASKS,
     payload: tasksList
+  });
+};
+
+export const fetchTask = id => async (dispatch, getState, api) => {
+  const { data } = await api.post('/fetch-task', { id });
+
+  const task = {
+    name: data._source.name || '',
+    description: data._source.description || '',
+    priority: data._source.priority || 0,
+    submittedByUser: data._source.submittedByUser || '',
+    done: data._source.done || false,
+    files: data._source.files || [],
+    id
+  };
+
+  dispatch({
+    type: FETCH_TASK,
+    payload: task
   });
 };
 
@@ -90,10 +110,10 @@ export const isDone = (id, done) => async (dispatch, getState, api) => {
   console.log(id);
   const res = await api.post('/done', !done);
 
-  // dispatch({
-  //   type: DONE,
-  //   payload: res
-  // });
+  dispatch({
+    type: DONE,
+    payload: res
+  });
 };
 
 export const uploadDocumentRequest = ({ file, name }) => async (
