@@ -1,20 +1,15 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchTasks, createTask } from "../actions";
-import { Helmet } from "react-helmet";
-import CreateTask from "../components/CreateTask";
-import Task from "../components/Task";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchTasks, createTask } from '../actions';
+import { Helmet } from 'react-helmet';
+import CreateTask from '../components/CreateTask';
+import Task from '../components/Task';
 
 class HomePage extends Component {
   componentDidMount() {
     this.props.fetchTasks();
   }
 
-  // componentWillReceiveProps(nextProps) {
-    
-  // }
-
-  
   head() {
     return (
       <Helmet>
@@ -23,13 +18,7 @@ class HomePage extends Component {
       </Helmet>
     );
   }
-  
-  handleSubmit(values) {
-    console.log("===============SUBMIT=================");
-    console.log(values);
-    console.log("====================================");
-  }
-  
+
   renderTasks() {
     if (this.props.tasks) {
       return this.props.tasks.map((task, i) => {
@@ -42,7 +31,7 @@ class HomePage extends Component {
     return (
       <div className="container">
         {this.head()}
-        <CreateTask handleSubmit={this.handleSubmit.bind(this)} />
+        <CreateTask />
         <h2>List of Tasks:</h2>
         <ul>{this.renderTasks()}</ul>
       </div>

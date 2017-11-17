@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { editTask, fetchTask } from '../actions';
+import { updateTask, fetchTask } from '../actions';
 import FormTask from '../components/FormTask';
 
 class EditPage extends Component {
@@ -14,17 +15,29 @@ class EditPage extends Component {
     this.props.fetchTask(this.props.match.params.id);
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-
-    this.props.editTask(this.state);
+  handleSubmit(update) {
+    this.props.updateTask({...update, id: this.props.task.id});
   }
 
-  render() {
+  renderEdit() {
     if (this.props.task) {
       return <FormTask task={this.props.task} onSubmit={this.handleSubmit} />;
     }
     return <div />;
+  }
+
+  render() {
+    return (
+      <div className="container">
+        {this.renderEdit()}
+
+        <div className="form-group">
+          <Link to="/">
+            <button className="btn red">Cancel</button>
+          </Link>
+        </div>
+      </div>
+    );
   }
 }
 
@@ -42,5 +55,5 @@ function loadData(store, path) {
 
 export default {
   loadData,
-  component: connect(null, { editTask, fetchTask })(EditPage),
+  component: connect(mapStateToProps, { updateTask, fetchTask })(EditPage)
 };

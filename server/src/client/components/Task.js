@@ -39,19 +39,23 @@ class Task extends Component {
       i
     } = this.props;
 
+    console.log('===============TASK==================');
+    console.log(name, description);
+    console.log('====================================');
+
     return (
       <div key={id} className="horizontal">
         <br />
         {done ? (
-          <button className="btn" onClick={() => isDone(id, done)}>
-           <h6>
-              <del>{name}</del>
-            </h6>
-          </button>
-        ) : (
-          <button className="btn" onClick={() => isDone(id, done)}>
+          <button className="btn red" onClick={() => isDone(i, done)}>
             <h6>{name}</h6>
           </button>
+        ) : (
+          <h6>
+            <button className="btn" onClick={() => isDone(i, done)}>
+              {name}
+            </button>
+          </h6>
         )}
         <br />
         <p>{description}</p>

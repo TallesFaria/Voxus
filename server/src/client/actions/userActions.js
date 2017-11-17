@@ -47,6 +47,9 @@ export const fetchTask = id => async (dispatch, getState, api) => {
     files: data._source.files || [],
     id
   };
+  console.log('=============ACTIon====================');
+  console.log(task);
+  console.log('====================================');
 
   dispatch({
     type: FETCH_TASK,
@@ -86,33 +89,31 @@ export const deleteTask = index => async (dispatch, getState, api) => {
   });
 };
 
-export const updateTask = task => async (dispatch, getState, api) => {
-  console.log(task);
-  const res = await api.delete('/update', id);
+export const updateTask = data => async (dispatch, getState, api) => {
+  await api.post('/update-task', data);
 
-  // dispatch({
-  //   type: UPDATE_TASK,
-  //   payload: res
-  // });
+  const task = {
+    name: data.taskName || '',
+    description: data.description || '',
+    priority: data.priority || 0,
+    done: false,
+    id: data.id
+  };
+
+  dispatch({
+    type: UPDATE_TASK,
+    payload: task
+  });
 };
 
-export const uploadFiles = file => async (dispatch, getState, api) => {
-  console.log(file);
-  const res = await api.post('/upload-files', file);
-
-  // dispatch({
-  //   type: UPLOAD_FILES,
-  //   payload: res
-  // });
-};
-
-export const isDone = (id, done) => async (dispatch, getState, api) => {
-  console.log(id);
-  const res = await api.post('/done', !done);
+export const isDone = (index, done) => async (dispatch, getState, api) => {
+  console.log(index);
+  await api.post('/done', !done);
 
   dispatch({
     type: DONE,
-    payload: res
+    payload: index,
+    done
   });
 };
 

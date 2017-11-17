@@ -3,11 +3,8 @@ import React, { Component } from 'react';
 class FormTask extends Component {
   constructor(props) {
     super(props);
-    console.log('===============CONSTRUCTOR==================');
-    console.log(props);
-    console.log('====================================');
     this.state = {
-      taskName: props.task.taskName,
+      taskName: props.task.name,
       description: props.task.description,
       priority: props.task.priority
     };
@@ -73,7 +70,7 @@ class FormTask extends Component {
               />
             </div>
             <div className="form-group">
-              <button className="btn btn-primary">Create</button>
+              <button className="btn btn-primary">Submit</button>
             </div>
           </form>
         </div>
