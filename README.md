@@ -22,10 +22,24 @@ Go to localhost:3000
 * Task 4:
 * Task 5: 
 
+
 ### Code Structure ###
 
 * build: bundle containing server side code + react code
 * public: bundle sent onto the browser containing only React code 
+
+* api: API server - contain application logic
+* * config: keys for production, development, etc
+* * controllers: interface between routes and database - query data and return them.
+* * * checkout: 
+* * middlewares: in this case responsible for protecting routes: login required
+* * services: passport for login + security analysis
+* * shared: files shared between site and erp 
+* * * constants
+* * * helper
+* * * models - data modeling used in mongo
+* * index.js: app/express + make connection available
+
 * server: SSR + React code for the client
 * * client: React code for the client + Redux architecture
 * * * actions: all actions files

@@ -8,6 +8,16 @@ import createStore from './helpers/createStore';
 
 const app = express();
 
+// const port = process.env.PORT || 4000;
+// const mongoAddress = 'mongodb://localhost/voxus';
+
+// const mongoOptions = {
+//   server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+//   replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }
+// };
+
+// mongoose.connect(mongoAddress, mongoOptions);
+
 app.use(
   '/api',
   proxy('localhost:4000', {
