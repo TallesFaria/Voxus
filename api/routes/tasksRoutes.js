@@ -4,19 +4,45 @@ const ElasticClient = require("../config/ElasticClient");
 
 module.exports = app => {
   app.get("/tasks", (req, res) => {
-    ElasticClient.index(
+    ElasticClient.search(
       {
         index: "tasks",
         type: "task",
-        size: "20",
-        query: {
-          match_all: {}
+        body: {
+          query: {
+            match_all: {}
+          }
         }
       },
-      function(err, res, status) {
-        res.send(res);
+      function(error, response, status) {
+        if (error) {
+          console.log("search error: " + error);
+        } else {
+          console.log("--- Response ---");
+          console.log(response);
+          console.log("--- Hits ---");
+          response.hits.hits.forEach(function(hit) {
+            console.log(hit);
+          });
+          res.send(response.hits)
+        }
       }
     );
+    // ElasticClient.index(
+    //   {
+    //     index: "tasks",
+    //     type: "task",
+    //     body: {
+    //       size: 20,
+    //       query: { 
+    //         match_all: {}
+    //       }
+    //     }
+    //   },
+    //   function(err, resp, status) {
+    //     res.send(resp);
+    //   }
+    // );
   });
 
   app.post("/new-task", (req, res) => {

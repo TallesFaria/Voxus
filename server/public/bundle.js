@@ -5621,9 +5621,13 @@ Object.keys(_userActions).forEach(function (key) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var FETCH_TASKS = exports.FETCH_TASKS = 'FETCH_TASKS';
 var FETCH_CURRENT_USER = exports.FETCH_CURRENT_USER = 'FETCH_CURRENT_USER';
+var FETCH_TASKS = exports.FETCH_TASKS = 'FETCH_TASKS';
 var CREATE_TASK = exports.CREATE_TASK = 'CREATE_TASK';
+var DELETE_TASK = exports.DELETE_TASK = 'DELETE_TASK';
+var UPDATE_TASK = exports.UPDATE_TASK = 'UPDATE_TASK';
+var UPLOAD_FILES = exports.UPLOAD_FILES = 'UPLOAD_FILES';
+var DONE = exports.DONE = 'DONE';
 
 /***/ }),
 /* 142 */
@@ -41627,7 +41631,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(Header);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchCurrentUser = exports.createTask = exports.fetchTasks = undefined;
+exports.fetchCurrentUser = exports.done = exports.uploadFiles = exports.updateTask = exports.deleteTask = exports.createTask = exports.fetchTasks = undefined;
 
 var _types = __webpack_require__(141);
 
@@ -41647,12 +41651,15 @@ var fetchTasks = exports.fetchTasks = function fetchTasks() {
             case 2:
               res = _context.sent;
 
-              dispatch({
-                type: _types.FETCH_TASKS,
-                payload: res
-              });
+              console.log('==============FETCH TASKS RES===================');
+              console.log(res);
+              console.log('====================================');
+              // dispatch({
+              //   type: FETCH_TASKS,
+              //   payload: res
+              // });
 
-            case 4:
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -41695,7 +41702,7 @@ var createTask = exports.createTask = function createTask(task) {
   }();
 };
 
-var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
+var deleteTask = exports.deleteTask = function deleteTask(id) {
   return function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(dispatch, getState, api) {
       var res;
@@ -41703,17 +41710,12 @@ var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.next = 2;
-              return api.get("/current_user");
+              console.log(id);
+              _context3.next = 3;
+              return api.delete("/delete", id);
 
-            case 2:
+            case 3:
               res = _context3.sent;
-
-
-              dispatch({
-                type: _types.FETCH_CURRENT_USER,
-                payload: res
-              });
 
             case 4:
             case "end":
@@ -41725,6 +41727,127 @@ var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
 
     return function (_x7, _x8, _x9) {
       return _ref3.apply(this, arguments);
+    };
+  }();
+};
+
+var updateTask = exports.updateTask = function updateTask(task) {
+  return function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(dispatch, getState, api) {
+      var res;
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              console.log(task);
+              _context4.next = 3;
+              return api.delete("/update", id);
+
+            case 3:
+              res = _context4.sent;
+
+            case 4:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, undefined);
+    }));
+
+    return function (_x10, _x11, _x12) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+};
+
+var uploadFiles = exports.uploadFiles = function uploadFiles(file) {
+  return function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(dispatch, getState, api) {
+      var res;
+      return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              console.log(file);
+              _context5.next = 3;
+              return api.post("/upload-files", file);
+
+            case 3:
+              res = _context5.sent;
+
+            case 4:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, undefined);
+    }));
+
+    return function (_x13, _x14, _x15) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+};
+
+var done = exports.done = function done(id) {
+  return function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(dispatch, getState, api) {
+      var res;
+      return regeneratorRuntime.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              console.log(id);
+              _context6.next = 3;
+              return api.post("/done", done);
+
+            case 3:
+              res = _context6.sent;
+
+            case 4:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, undefined);
+    }));
+
+    return function (_x16, _x17, _x18) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+};
+
+var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
+  return function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(dispatch, getState, api) {
+      var res;
+      return regeneratorRuntime.wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.next = 2;
+              return api.get("/current_user");
+
+            case 2:
+              res = _context7.sent;
+
+
+              dispatch({
+                type: _types.FETCH_CURRENT_USER,
+                payload: res
+              });
+
+            case 4:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, undefined);
+    }));
+
+    return function (_x19, _x20, _x21) {
+      return _ref7.apply(this, arguments);
     };
   }();
 };
