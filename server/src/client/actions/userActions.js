@@ -10,7 +10,7 @@ export const fetchTasks = () => async (dispatch, getState, api) => {
 
 export const createTask = (task) => async (dispatch, getState, api) => {
   console.log(task)
-  //const res = await api.post("/create_task", task);
+  const res = await api.post("/new-task", task);
 
   // dispatch({
   //   type: CREATE_TASK,
