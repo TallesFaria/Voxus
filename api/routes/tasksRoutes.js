@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const requireLogin = require("../middlewares/requireLogin");
 const ElasticClient = require("../config/ElasticClient");
+const Upload = require('./upload.server.controller')
+const multipart = require('connect-multiparty')
+const multer = require('multer');
+const multipartMiddleware = multipart()
 
 module.exports = app => {
   app.get("/tasks", (req, res) => {
@@ -104,23 +108,18 @@ module.exports = app => {
     res.send("Update - Success");
   });
 
-  app.post("/upload-files", (req, res) => {
-    ElasticClient.index(
-      {
-        index: "tasks",
-        type: "task",
-        id: req.body.id,
-        body: {
-          path: req.body.path
-        }
-      },
-      function(err, resp, status) {
-        console.log(resp);
-      }
-    );
-
-    res.send("Update - Success");
+  const storage = multer.diskStorage({
+    destination: __dirname+"/files",
+    filename(req, file, cb) {
+      cb(null, `${new Date()}-${file.originalname}`);
+    }
   });
+  
+  const upload = multer({ storage });
+
+  app.post('/upload', upload.single('file'), Upload.upload)
+  // app.post('/upload', multipartMiddleware, Upload.upload)
+  
 
   app.post("/done", (req, res) => {
     ElasticClient.index(
