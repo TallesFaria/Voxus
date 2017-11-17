@@ -1,25 +1,13 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchTasks, createTask } from "../actions";
-import { Helmet } from "react-helmet";
-import CreateTask from "../components/CreateTask";
-import Task from "../components/Task";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchTasks, createTask } from '../actions';
+import { Helmet } from 'react-helmet';
+import CreateTask from '../components/CreateTask';
+import Task from '../components/Task';
 
 class HomePage extends Component {
   componentDidMount() {
     this.props.fetchTasks();
-  }
-
-  // componentWillReceiveProps(nextProps) {
-    
-  // }
-
-  renderTasks() {
-    if (this.props.tasks.data) {
-      return this.props.tasks.data.map(task => {
-        return <Task task={task._source} id={task._id} key={task._id} />;
-      });
-    }
   }
 
   head() {
@@ -31,17 +19,19 @@ class HomePage extends Component {
     );
   }
 
-  handleSubmit(values) {
-    console.log("===============SUBMIT=================");
-    console.log(values);
-    console.log("====================================");
+  renderTasks() {
+    if (this.props.tasks) {
+      return this.props.tasks.map((task, i) => {
+        return <Task task={task} key={i} i={i} />;
+      });
+    }
   }
 
   render() {
     return (
       <div className="container">
         {this.head()}
-        <CreateTask handleSubmit={this.handleSubmit.bind(this)} />
+        <CreateTask />
         <h2>List of Tasks:</h2>
         <ul>{this.renderTasks()}</ul>
       </div>
