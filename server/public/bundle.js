@@ -42108,13 +42108,15 @@ var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
             case 2:
               res = _context8.sent;
 
-
+              console.log('=============USER=====================');
+              console.log(res);
+              console.log('====================================');
               dispatch({
                 type: _types.FETCH_CURRENT_USER,
                 payload: res
               });
 
-            case 4:
+            case 7:
             case 'end':
               return _context8.stop();
           }

@@ -145,7 +145,9 @@ export const uploadDocumentRequest = ({ file, name }) => async (
 
 export const fetchCurrentUser = () => async (dispatch, getState, api) => {
   const res = await api.get('/current_user');
-
+console.log('=============USER=====================');
+console.log(res);
+console.log('====================================');
   dispatch({
     type: FETCH_CURRENT_USER,
     payload: res

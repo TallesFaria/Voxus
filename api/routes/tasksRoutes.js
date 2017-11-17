@@ -33,7 +33,7 @@ module.exports = app => {
     console.log('=============CREATE TASK====================');
     console.log(req.body);
     console.log('====================================');
-    ElasticClient.create(
+    ElasticClient.index(
       {
         index: 'tasks',
         type: 'task',
