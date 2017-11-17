@@ -41500,6 +41500,10 @@ var _HomePage = __webpack_require__(544);
 
 var _HomePage2 = _interopRequireDefault(_HomePage);
 
+var _EditPage = __webpack_require__(726);
+
+var _EditPage2 = _interopRequireDefault(_EditPage);
+
 var _NotFoundPage = __webpack_require__(555);
 
 var _NotFoundPage2 = _interopRequireDefault(_NotFoundPage);
@@ -41510,6 +41514,8 @@ exports.default = [_extends({}, _App2.default, {
   routes: [_extends({}, _HomePage2.default, {
     path: '/',
     exact: true
+  }), _extends({}, _EditPage2.default, {
+    path: '/edit/:id'
   }), _extends({}, _NotFoundPage2.default)]
 })];
 
@@ -41633,7 +41639,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(Header);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchCurrentUser = exports.uploadDocumentRequest = exports.done = exports.uploadFiles = exports.updateTask = exports.deleteTask = exports.createTask = exports.fetchTasks = undefined;
+exports.fetchCurrentUser = exports.uploadDocumentRequest = exports.isDone = exports.uploadFiles = exports.updateTask = exports.deleteTask = exports.createTask = exports.fetchTasks = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -41650,27 +41656,39 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 var fetchTasks = exports.fetchTasks = function fetchTasks() {
   return function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState, api) {
-      var res;
+      var res, tasksList;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return api.get("/tasks");
+              return api.get('/tasks');
 
             case 2:
               res = _context.sent;
+              tasksList = [];
 
-              console.log("==============FETCH TASKS RES===================");
-              console.log(res.data.hits);
-              console.log("====================================");
+              res.data.hits.map(function (task) {
+                return tasksList.push({
+                  name: task._source.name || '',
+                  description: task._source.description || '',
+                  priority: task._source.priority || 0,
+                  submittedByUser: task._source.submittedByUser || '',
+                  done: task._source.done || false,
+                  files: task._source.files || [],
+                  id: task._id
+                });
+              });
+              console.log('====================================');
+              console.log(tasksList);
+              console.log('====================================');
               dispatch({
                 type: _types.FETCH_TASKS,
-                payload: res.data.hits
+                payload: tasksList
               });
 
-            case 7:
-            case "end":
+            case 9:
+            case 'end':
               return _context.stop();
           }
         }
@@ -41686,33 +41704,36 @@ var fetchTasks = exports.fetchTasks = function fetchTasks() {
 var createTask = exports.createTask = function createTask(task) {
   return function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(dispatch, getState, api) {
-      var res1, res;
+      var res, addedTask;
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              console.log(task);
-              _context2.next = 3;
-              return api.post("/new-task", _extends({}, task, {
+              _context2.next = 2;
+              return api.post('/new-task', _extends({}, task, {
                 isTask: true,
                 done: false
               }));
 
-            case 3:
-              res1 = _context2.sent;
-              _context2.next = 6;
-              return api.get("/tasks");
-
-            case 6:
+            case 2:
               res = _context2.sent;
+              addedTask = {
+                name: task.taskName || '',
+                description: task.description || '',
+                priority: task.priority || 0,
+                submittedByUser: task.submittedByUser || '',
+                done: task.done || false,
+                files: task.files || [],
+                id: res.data._id
+              };
 
               dispatch({
-                type: _types.FETCH_TASKS,
-                payload: res.data.hits
+                type: _types.CREATE_TASK,
+                payload: addedTask
               });
 
-            case 8:
-            case "end":
+            case 5:
+            case 'end':
               return _context2.stop();
           }
         }
@@ -41725,7 +41746,7 @@ var createTask = exports.createTask = function createTask(task) {
   }();
 };
 
-var deleteTask = exports.deleteTask = function deleteTask(id) {
+var deleteTask = exports.deleteTask = function deleteTask(index) {
   return function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(dispatch, getState, api) {
       var res;
@@ -41733,15 +41754,21 @@ var deleteTask = exports.deleteTask = function deleteTask(id) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              console.log(id);
+              console.log(index);
               _context3.next = 3;
-              return api.delete("/delete", id);
+              return api.delete('/delete', index);
 
             case 3:
               res = _context3.sent;
 
-            case 4:
-            case "end":
+
+              dispatch({
+                type: _types.DELETE_TASK,
+                payload: index
+              });
+
+            case 5:
+            case 'end':
               return _context3.stop();
           }
         }
@@ -41764,13 +41791,13 @@ var updateTask = exports.updateTask = function updateTask(task) {
             case 0:
               console.log(task);
               _context4.next = 3;
-              return api.delete("/update", id);
+              return api.delete('/update', id);
 
             case 3:
               res = _context4.sent;
 
             case 4:
-            case "end":
+            case 'end':
               return _context4.stop();
           }
         }
@@ -41793,13 +41820,13 @@ var uploadFiles = exports.uploadFiles = function uploadFiles(file) {
             case 0:
               console.log(file);
               _context5.next = 3;
-              return api.post("/upload-files", file);
+              return api.post('/upload-files', file);
 
             case 3:
               res = _context5.sent;
 
             case 4:
-            case "end":
+            case 'end':
               return _context5.stop();
           }
         }
@@ -41812,7 +41839,7 @@ var uploadFiles = exports.uploadFiles = function uploadFiles(file) {
   }();
 };
 
-var done = exports.done = function done(id, _done) {
+var isDone = exports.isDone = function isDone(id, done) {
   return function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(dispatch, getState, api) {
       var res;
@@ -41822,13 +41849,13 @@ var done = exports.done = function done(id, _done) {
             case 0:
               console.log(id);
               _context6.next = 3;
-              return api.post("/done", !_done);
+              return api.post('/done', !done);
 
             case 3:
               res = _context6.sent;
 
             case 4:
-            case "end":
+            case 'end':
               return _context6.stop();
           }
         }
@@ -41853,12 +41880,12 @@ var uploadDocumentRequest = exports.uploadDocumentRequest = function uploadDocum
             case 0:
               data = new FormData();
 
-              data.append("file", document);
-              data.append("name", name);
+              data.append('file', document);
+              data.append('name', name);
               res = void 0;
               _context7.prev = 4;
               _context7.next = 7;
-              return api.post("/upload", data);
+              return api.post('/upload', data);
 
             case 7:
               res = _context7.sent;
@@ -41866,21 +41893,21 @@ var uploadDocumentRequest = exports.uploadDocumentRequest = function uploadDocum
               console.log('====================================');
               console.log(res);
               console.log('====================================');
-              return _context7.abrupt("return", {
+              return _context7.abrupt('return', {
                 type: _types.UPLOAD_DOCUMENT_SUCCESS,
-                payload: data
+                payload: true
               });
 
             case 14:
               _context7.prev = 14;
-              _context7.t0 = _context7["catch"](4);
-              return _context7.abrupt("return", {
+              _context7.t0 = _context7['catch'](4);
+              return _context7.abrupt('return', {
                 type: _types.UPLOAD_DOCUMENT_FAIL,
-                payload: _context7.t0
+                payload: false
               });
 
             case 17:
-            case "end":
+            case 'end':
               return _context7.stop();
           }
         }
@@ -41893,31 +41920,6 @@ var uploadDocumentRequest = exports.uploadDocumentRequest = function uploadDocum
   }();
 };
 
-// export const uploadDocumentRequest = ({ file, name }) => async (dispatch, getState, api) => {
-//   let data = new FormData();
-//   data.append("file", document);
-//   data.append("name", name);
-//   let res;
-
-//   try{
-//     res =  await api.post("/upload", data)
-//   } catch(error) {
-//     dispatch(uploadFail(error))
-//   }
-
-//   console.log('====================================');
-//   console.log(res);
-//   console.log('====================================');
-//   //dispatch(uploadSuccess(response));
-
-//   // return dispatch => {
-//   //   axios
-//   //     .post("/upload", data)
-//   //     .then(response => dispatch(uploadSuccess(response)))
-//   //     .catch(error => dispatch(uploadFail(error)));
-//   // };
-// };
-
 var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
   return function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(dispatch, getState, api) {
@@ -41927,7 +41929,7 @@ var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
           switch (_context8.prev = _context8.next) {
             case 0:
               _context8.next = 2;
-              return api.get("/current_user");
+              return api.get('/current_user');
 
             case 2:
               res = _context8.sent;
@@ -41939,7 +41941,7 @@ var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
               });
 
             case 4:
-            case "end":
+            case 'end':
               return _context8.stop();
           }
         }
@@ -42010,15 +42012,7 @@ var HomePage = function (_Component) {
 
     // }
 
-  }, {
-    key: "renderTasks",
-    value: function renderTasks() {
-      if (this.props.tasks.data) {
-        return this.props.tasks.data.map(function (task) {
-          return _react2.default.createElement(_Task2.default, { task: task._source, id: task._id, key: task._id });
-        });
-      }
-    }
+
   }, {
     key: "head",
     value: function head() {
@@ -42039,6 +42033,15 @@ var HomePage = function (_Component) {
       console.log("===============SUBMIT=================");
       console.log(values);
       console.log("====================================");
+    }
+  }, {
+    key: "renderTasks",
+    value: function renderTasks() {
+      if (this.props.tasks) {
+        return this.props.tasks.map(function (task, i) {
+          return _react2.default.createElement(_Task2.default, { task: task, key: i, i: i });
+        });
+      }
     }
   }, {
     key: "render",
@@ -43326,9 +43329,9 @@ var CreateTask = function (_Component) {
     var _this = _possibleConstructorReturn(this, (CreateTask.__proto__ || Object.getPrototypeOf(CreateTask)).call(this, props));
 
     _this.state = {
-      taskName: "",
-      description: "",
-      priority: 0
+      taskName: '',
+      description: '',
+      priority: ''
     };
 
     _this.handleChange = _this.handleChange.bind(_this);
@@ -43337,7 +43340,7 @@ var CreateTask = function (_Component) {
   }
 
   _createClass(CreateTask, [{
-    key: "handleChange",
+    key: 'handleChange',
     value: function handleChange(e) {
       var _e$target = e.target,
           name = _e$target.name,
@@ -43346,7 +43349,7 @@ var CreateTask = function (_Component) {
       this.setState(_defineProperty({}, name, value));
     }
   }, {
-    key: "handleSubmit",
+    key: 'handleSubmit',
     value: function handleSubmit(e) {
       e.preventDefault();
 
@@ -43358,69 +43361,74 @@ var CreateTask = function (_Component) {
       if (taskName || description) {
         this.props.createTask(this.state);
       }
+      this.setState({
+        taskName: '',
+        description: '',
+        priority: ''
+      });
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        "div",
+        'div',
         null,
         _react2.default.createElement(
-          "div",
-          { className: "col-md-6 col-md-offset-3" },
+          'div',
+          { className: 'col-md-6 col-md-offset-3' },
           _react2.default.createElement(
-            "h2",
+            'h2',
             null,
-            "New Task"
+            'New Task'
           ),
           _react2.default.createElement(
-            "form",
-            { name: "form", onSubmit: this.handleSubmit },
+            'form',
+            { name: 'form', onSubmit: this.handleSubmit },
             _react2.default.createElement(
-              "div",
+              'div',
               null,
-              _react2.default.createElement("input", {
-                type: "text",
-                className: "form-control",
-                name: "taskName",
+              _react2.default.createElement('input', {
+                type: 'text',
+                className: 'form-control',
+                name: 'taskName',
                 value: this.state.taskName,
                 onChange: this.handleChange,
-                placeholder: "Task Name"
+                placeholder: 'Task Name'
               })
             ),
             _react2.default.createElement(
-              "div",
+              'div',
               null,
-              _react2.default.createElement("br", null),
-              _react2.default.createElement("input", {
-                type: "text",
-                className: "form-control",
-                name: "description",
+              _react2.default.createElement('br', null),
+              _react2.default.createElement('input', {
+                type: 'text',
+                className: 'form-control',
+                name: 'description',
                 value: this.state.description,
                 onChange: this.handleChange,
-                placeholder: "description"
+                placeholder: 'description'
               })
             ),
             _react2.default.createElement(
-              "div",
+              'div',
               null,
-              _react2.default.createElement("br", null),
-              _react2.default.createElement("input", {
-                type: "text",
-                className: "form-control",
-                name: "priority",
+              _react2.default.createElement('br', null),
+              _react2.default.createElement('input', {
+                type: 'text',
+                className: 'form-control',
+                name: 'priority',
                 value: this.state.priority,
                 onChange: this.handleChange,
-                placeholder: "priority"
+                placeholder: 'Priority'
               })
             ),
             _react2.default.createElement(
-              "div",
-              { className: "form-group" },
+              'div',
+              { className: 'form-group' },
               _react2.default.createElement(
-                "button",
-                { className: "btn btn-primary" },
-                "Create"
+                'button',
+                { className: 'btn btn-primary' },
+                'Create'
               )
             )
           )
@@ -43450,6 +43458,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(198);
 
 var _reactRedux = __webpack_require__(28);
 
@@ -43505,21 +43515,26 @@ var Task = function (_Component) {
     key: 'render',
     value: function render() {
       var _props = this.props,
-          task = _props.task,
-          id = _props.id,
-          done = _props.done,
+          _props$task = _props.task,
+          id = _props$task.id,
+          description = _props$task.description,
+          priority = _props$task.priority,
+          name = _props$task.name,
+          done = _props$task.done,
+          isDone = _props.isDone,
           updateTask = _props.updateTask,
-          deleteTask = _props.deleteTask;
+          deleteTask = _props.deleteTask,
+          i = _props.i;
 
 
       return _react2.default.createElement(
         'div',
         { key: id, className: 'horizontal' },
         _react2.default.createElement('br', null),
-        task.done ? _react2.default.createElement(
+        done ? _react2.default.createElement(
           'button',
           { className: 'btn', onClick: function onClick() {
-              return done(id, task.done);
+              return isDone(id, done);
             } },
           _react2.default.createElement(
             'h6',
@@ -43527,42 +43542,37 @@ var Task = function (_Component) {
             _react2.default.createElement(
               'del',
               null,
-              task.name
+              name
             )
           )
         ) : _react2.default.createElement(
           'button',
           { className: 'btn', onClick: function onClick() {
-              return done(id, task.done);
+              return isDone(id, done);
             } },
           _react2.default.createElement(
             'h6',
             null,
-            task.name
+            name
           )
         ),
-        _react2.default.createElement('hr', null),
         _react2.default.createElement('br', null),
         _react2.default.createElement(
-          'li',
+          'p',
           null,
-          task.description
+          description
         ),
         _react2.default.createElement(
-          'li',
+          'p',
           null,
-          task.priority
-        ),
-        _react2.default.createElement('br', null),
-        _react2.default.createElement(
-          'button',
-          { className: 'btn' },
           _react2.default.createElement(
-            'i',
-            { className: 'material-icons' },
-            'edit'
-          )
+            'strong',
+            null,
+            'Priority '
+          ),
+          priority
         ),
+        _react2.default.createElement('br', null),
         _react2.default.createElement(
           'button',
           { className: 'btn' },
@@ -43572,7 +43582,7 @@ var Task = function (_Component) {
         _react2.default.createElement(
           'button',
           { className: 'btn red', onClick: function onClick() {
-              return deleteTask(id);
+              return deleteTask(i);
             } },
           _react2.default.createElement(
             'i',
@@ -43594,7 +43604,7 @@ function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, {
   updateTask: _actions.updateTask,
   deleteTask: _actions.deleteTask,
-  done: _actions.done,
+  isDone: _actions.isDone,
   uploadDocumentRequest: _actions.uploadDocumentRequest
 })(Task);
 
@@ -51945,9 +51955,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _types = __webpack_require__(141);
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 exports.default = function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -51955,8 +51965,14 @@ exports.default = function () {
 
   switch (action.type) {
     case _types.FETCH_TASKS:
-      var tasks = action.payload;
-      return _extends({}, state, { data: tasks });
+      return action.payload;
+    case _types.CREATE_TASK:
+      return [].concat(_toConsumableArray(state), [action.payload]);
+    case _types.DELETE_TASK:
+      console.log('==============AFTER DELETION===================', action.payload);
+      console.log([].concat(_toConsumableArray(state.slice(0, action.payload)), _toConsumableArray(state.slice(action.payload + 1))));
+      console.log('====================================');
+      return [].concat(_toConsumableArray(state.slice(0, action.payload)), _toConsumableArray(state.slice(action.payload + 1)));
     default:
       return state;
   }
@@ -52013,6 +52029,222 @@ exports.default = function () {
     default:
       return state;
   }
+};
+
+/***/ }),
+/* 726 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EditPage = function (_Component) {
+  _inherits(EditPage, _Component);
+
+  function EditPage() {
+    _classCallCheck(this, EditPage);
+
+    return _possibleConstructorReturn(this, (EditPage.__proto__ || Object.getPrototypeOf(EditPage)).apply(this, arguments));
+  }
+
+  _createClass(EditPage, [{
+    key: 'getInitialState',
+    value: function getInitialState() {
+      return {
+        todos: [{ task: 'Item 1' }],
+        editorText: '',
+        itemBeingEdited: 2
+      };
+    }
+  }, {
+    key: 'textBeingEdited',
+    value: function textBeingEdited() {
+      var store = this.state;
+      var x = store.todos[store.itemBeingEdited];
+      return x ? x.task : '';
+    }
+  }, {
+    key: 'buttonText',
+    value: function buttonText() {
+      var store = this.state;
+      return store.itemBeingEdited < store.todos.length ? 'Save' : 'Add';
+    }
+  }, {
+    key: 'editorIsEmpty',
+    value: function editorIsEmpty() {
+      var store = this.state;
+      return store.editorText === '';
+    }
+  }, {
+    key: 'onAddItem',
+    value: function onAddItem() {
+      var store = this.state;
+      if (state.itemBeingEdited > state.todos.length) {
+        console.log('Adding');
+        this.setState({
+          todos: store.todos.push({ task: this.editorText }),
+          itemBeingEdited: store.itemBeingEdited + 1,
+          editorText: ''
+        });
+      } else {
+        console.log('Saving');
+        store.todos[store.itemBeingEdited].tast = store.editorText;
+        this.setState({
+          todos: store.todos,
+          editorText: '',
+          itemBeingEdited: store.todos.length + 1
+        });
+      }
+    }
+  }, {
+    key: 'onDeleteItem',
+    value: function onDeleteItem(i) {
+      var store = this.state;
+      store.todos.splice(i, 1);
+      if (store.itemBeingEdited === i) {
+        this.setState({
+          itemBeingEdited: store.todos.length + 1,
+          editorText: '',
+          todos: todos
+        });
+      }
+    }
+  }, {
+    key: 'onEditItem',
+    value: function onEditItem(i) {
+      var store = this.state;
+      this.setState({
+        itemBeingEdited: i,
+        editorText: this.textBeingEdited()
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var store = this.state;
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(TextEditor, { store: store }),
+        _react2.default.createElement(ListGroup, { store: store })
+      );
+    }
+  }]);
+
+  return EditPage;
+}(_react.Component);
+
+var ListItem = function ListItem(props) {
+  console.log('Rendering ListItem');
+  return _react2.default.createElement(
+    'li',
+    { className: 'list-group-item clearfix constraint' },
+    _react2.default.createElement(
+      'span',
+      { className: 'pull-left' },
+      props.todo.task
+    ),
+    _react2.default.createElement(
+      'span',
+      { className: 'pull-right' },
+      _react2.default.createElement(
+        'div',
+        { className: 'btn-group' },
+        _react2.default.createElement(
+          'button',
+          {
+            className: 'btn btn-danger btn-xs delete',
+            onClick: props.deleteItem
+          },
+          'x'
+        ),
+        _react2.default.createElement(
+          'button',
+          {
+            className: 'btn btn-success btn-xs edit',
+            onClick: props.editItem
+          },
+          '-'
+        )
+      )
+    )
+  );
+};
+
+var ListGroup = function ListGroup(_ref) {
+  var store = _ref.store;
+
+  console.log('Rendering ListGroup');
+  var listItem = function listItem(d, i) {
+    return _react2.default.createElement(ListItem, {
+      key: i,
+      todo: d,
+      deleteItem: function deleteItem(e) {
+        return store.onDeleteItem(i);
+      },
+      editItem: function editItem(e) {
+        return store.onEditItem(i);
+      }
+    });
+  };
+  return _react2.default.createElement(
+    'ul',
+    { className: 'list-group' },
+    store.todos.map(listItem)
+  );
+};
+
+var TextEditor = function TextEditor(_ref2) {
+  var store = _ref2.store;
+
+  console.log('Rendering TextEditor');
+  return _react2.default.createElement(
+    'div',
+    { className: 'editor' },
+    _react2.default.createElement(
+      'h4',
+      null,
+      'Constraint Editor'
+    ),
+    _react2.default.createElement('textarea', {
+      className: 'form-control',
+      value: store.editorText,
+      onChange: function onChange(e) {
+        return store.editorText = e.target.value;
+      }
+    }),
+    _react2.default.createElement(
+      'button',
+      {
+        className: 'btn btn-default btn-sm',
+        onClick: store.onAddItem.bind(store),
+        disabled: store.editorIsEmpty
+      },
+      store.buttonText
+    )
+  );
+};
+
+exports.default = {
+  component: EditPage
 };
 
 /***/ })

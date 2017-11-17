@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
   updateTask,
   deleteTask,
-  done,
+  isDone,
   uploadDocumentRequest
 } from '../actions';
 import {
@@ -32,36 +33,41 @@ class Task extends Component {
   }
 
   render() {
-    const { task, id, done, updateTask, deleteTask } = this.props;
+    const {
+      task: { id, description, priority, name, done },
+      isDone,
+      updateTask,
+      deleteTask,
+      i
+    } = this.props;
 
     return (
       <div key={id} className="horizontal">
         <br />
-        {task.done ? (
-          <button className="btn" onClick={() => done(id, task.done)}>
+        {done ? (
+          <button className="btn" onClick={() => isDone(id, done)}>
             <h6>
-              <del>{task.name}</del>
+              <del>{name}</del>
             </h6>
           </button>
         ) : (
-          <button className="btn" onClick={() => done(id, task.done)}>
-            <h6>{task.name}</h6>
+          <button className="btn" onClick={() => isDone(id, done)}>
+            <h6>{name}</h6>
           </button>
         )}
-        <hr />
         <br />
-        <li>{task.description}</li>
-        <li>{task.priority}</li>
+        <p>{description}</p>
+        <p>
+          <strong>Priority </strong>
+          {priority}
+        </p>
         <br />
-        <button className="btn">
-          <i className="material-icons">edit</i>
-        </button>
         <button className="btn">
           <input type="file" onChange={this.handleFileUpload.bind(this)} />
         </button>
         {this.uploadFile()}
 
-        <button className="btn red" onClick={() => deleteTask(id)}>
+        <button className="btn red" onClick={() => deleteTask(i)}>
           <i className="material-icons">delete_forever</i>
         </button>
       </div>
@@ -76,6 +82,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   updateTask,
   deleteTask,
-  done,
+  isDone,
   uploadDocumentRequest
 })(Task);

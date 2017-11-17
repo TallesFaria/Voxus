@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { createTask } from "../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { createTask } from '../actions';
 
 class CreateTask extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      taskName: "",
-      description: "",
-      priority: 0
+      taskName: '',
+      description: '',
+      priority: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -29,8 +29,13 @@ class CreateTask extends Component {
     if (taskName || description) {
       this.props.createTask(this.state);
     }
+    this.setState({
+      taskName: '',
+      description: '',
+      priority: ''
+    });
   }
-  
+
   render() {
     return (
       <div>
@@ -69,7 +74,7 @@ class CreateTask extends Component {
                 name="priority"
                 value={this.state.priority}
                 onChange={this.handleChange}
-                placeholder="priority"
+                placeholder="Priority"
               />
             </div>
             <div className="form-group">

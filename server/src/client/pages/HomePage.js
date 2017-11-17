@@ -14,14 +14,7 @@ class HomePage extends Component {
     
   // }
 
-  renderTasks() {
-    if (this.props.tasks.data) {
-      return this.props.tasks.data.map(task => {
-        return <Task task={task._source} id={task._id} key={task._id} />;
-      });
-    }
-  }
-
+  
   head() {
     return (
       <Helmet>
@@ -30,11 +23,19 @@ class HomePage extends Component {
       </Helmet>
     );
   }
-
+  
   handleSubmit(values) {
     console.log("===============SUBMIT=================");
     console.log(values);
     console.log("====================================");
+  }
+  
+  renderTasks() {
+    if (this.props.tasks) {
+      return this.props.tasks.map((task, i) => {
+        return <Task task={task} key={i} i={i} />;
+      });
+    }
   }
 
   render() {
