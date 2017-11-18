@@ -42079,7 +42079,8 @@ var isDone = exports.isDone = function isDone(index, done, id, auth) {
 
 var uploadDocumentRequest = exports.uploadDocumentRequest = function uploadDocumentRequest(_ref8) {
   var file = _ref8.file,
-      name = _ref8.name;
+      name = _ref8.name,
+      id = _ref8.id;
   return function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(dispatch, getState, api) {
       var data, res;
@@ -42091,12 +42092,13 @@ var uploadDocumentRequest = exports.uploadDocumentRequest = function uploadDocum
 
               data.append("file", document);
               data.append("name", name);
+              data.append("id", id);
               res = void 0;
-              _context7.prev = 4;
-              _context7.next = 7;
+              _context7.prev = 5;
+              _context7.next = 8;
               return api.post("/upload", data);
 
-            case 7:
+            case 8:
               res = _context7.sent;
 
               console.log("====================================");
@@ -42107,20 +42109,20 @@ var uploadDocumentRequest = exports.uploadDocumentRequest = function uploadDocum
                 payload: true
               });
 
-            case 14:
-              _context7.prev = 14;
-              _context7.t0 = _context7["catch"](4);
+            case 15:
+              _context7.prev = 15;
+              _context7.t0 = _context7["catch"](5);
               return _context7.abrupt("return", {
                 type: _types.UPLOAD_DOCUMENT_FAIL,
                 payload: false
               });
 
-            case 17:
+            case 18:
             case "end":
               return _context7.stop();
           }
         }
-      }, _callee7, undefined, [[4, 14]]);
+      }, _callee7, undefined, [[5, 15]]);
     }));
 
     return function (_x19, _x20, _x21) {
@@ -43636,13 +43638,9 @@ var Task = function (_Component) {
     key: "handleFileUpload",
     value: function handleFileUpload(e) {
       e.preventDefault();
-      // this.props.uploadDocumentRequest({
-      //   file: e.target.files[0],
-      //   name: e.target.files[0].name,
-      //   id: this.props.id
-      // });
       this.props.uploadDocumentRequest({
-        files: e.target.files,
+        file: e.target.files[0],
+        name: e.target.files[0].name,
         id: this.props.id
       });
     }
@@ -43747,7 +43745,7 @@ var Task = function (_Component) {
             _react2.default.createElement(
               "button",
               { className: "btn" },
-              _react2.default.createElement("input", { type: "file", onChange: this.handleFileUpload.bind(this), multiple: true })
+              _react2.default.createElement("input", { type: "file", onChange: this.handleFileUpload.bind(this) })
             ),
             this.uploadFile(),
             _react2.default.createElement("br", null),

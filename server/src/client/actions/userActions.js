@@ -120,7 +120,7 @@ export const isDone = (index, done, id, auth) => async (
   });
 };
 
-export const uploadDocumentRequest = ({ file, name }) => async (
+export const uploadDocumentRequest = ({ file, name, id }) => async (
   dispatch,
   getState,
   api
@@ -128,6 +128,7 @@ export const uploadDocumentRequest = ({ file, name }) => async (
   let data = new FormData();
   data.append("file", document);
   data.append("name", name);
+  data.append("id", id);
   let res;
 
   try {

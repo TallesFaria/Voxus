@@ -45,6 +45,14 @@ https://www.elastic.co/
     Users can mark task as done - register the user 
 
 * Task 5: 
+    Suport only single upload - 
+    I came up with a solution for multiple input but I since I had problem with creating my on account 
+    on Amazon S3 and yesterday I the one was using belongs from my friend and he changed his password so I
+    am unable to continue on. 
+
+    Yet some possible solution, which need testing, is on the branch multipleUpload.
+
+    When Done task is indexed on Elastic Search.
     
 ### Features ###
 * Click on the task to change their status

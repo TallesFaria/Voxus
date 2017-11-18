@@ -149,6 +149,22 @@ module.exports = app => {
       }
     );
 
+    ElasticClient.index(
+      {
+        index: 'tasks',
+        type: 'task',
+        id: req.body.id,
+        body: {
+          doc: {
+            done: req.body.done,
+            doneBy: req.body.doneBy
+          }
+        }
+      },
+      function(err, resp, status) {
+        console.log(resp);
+      }
+    );
     res.send('Update - Success');
   });
 

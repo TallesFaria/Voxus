@@ -26,13 +26,9 @@ class Task extends Component {
 
   handleFileUpload(e) {
     e.preventDefault();
-    // this.props.uploadDocumentRequest({
-    //   file: e.target.files[0],
-    //   name: e.target.files[0].name,
-    //   id: this.props.id
-    // });
     this.props.uploadDocumentRequest({
-      files: e.target.files,
+      file: e.target.files[0],
+      name: e.target.files[0].name,
       id: this.props.id
     });
   }
@@ -99,7 +95,7 @@ class Task extends Component {
               {this.state.priority}
             </p>
             <button className="btn">
-              <input type="file" onChange={this.handleFileUpload.bind(this)} multiple/>
+              <input type="file" onChange={this.handleFileUpload.bind(this)} />
             </button>
             {this.uploadFile()}
             <br />
