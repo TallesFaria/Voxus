@@ -72,7 +72,7 @@ class Task extends Component {
         <Link className="btn" to={`/edit/${id}`}>
           <i className="material-icons">edit</i>
         </Link>
-        <button className="btn red" onClick={() => deleteTask(i)}>
+        <button className="btn red" onClick={() => deleteTask(i, id)}>
           <i className="material-icons">delete_forever</i>
         </button>
       </div>

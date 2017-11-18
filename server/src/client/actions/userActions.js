@@ -26,7 +26,7 @@ export const fetchTasks = () => async (dispatch, getState, api) => {
       id: task._id
     })
   );
-  console.log('====================================');
+  console.log('================list of tasks================');
   console.log(tasksList);
   console.log('====================================');
   dispatch({
@@ -78,9 +78,9 @@ export const createTask = task => async (dispatch, getState, api) => {
   });
 };
 
-export const deleteTask = index => async (dispatch, getState, api) => {
+export const deleteTask = (index, id) => async (dispatch, getState, api) => {
   console.log(index);
-  const res = await api.delete('/delete', index);
+  const res = await api.post('/delete', { id });
 
   dispatch({
     type: DELETE_TASK,

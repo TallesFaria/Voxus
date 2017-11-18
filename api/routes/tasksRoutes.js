@@ -67,7 +67,10 @@ module.exports = app => {
     );
   });
 
-  app.delete('/delete', (req, res) => {
+  app.post('/delete', (req, res) => {
+    console.log('==========DELETE API======================');
+    console.log(req.body);
+    console.log('====================================');
     ElasticClient.delete(
       {
         index: 'tasks',
