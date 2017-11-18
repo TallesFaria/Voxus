@@ -11,7 +11,7 @@ const Header = ({ auth }) => {
 
   return (
     <nav>
-      <div className="nav-wrapper">
+      <div className="nav-wrapper cyan lighten-2">
         <Link to="/" className="brand-logo">
           Voxus - Tasks Manager
         </Link>

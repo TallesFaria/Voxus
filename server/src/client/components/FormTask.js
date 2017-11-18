@@ -47,7 +47,7 @@ class FormTask extends Component {
   render() {
     return (
       <div>
-        <div className="col-md-6 col-md-offset-3">
+        <div className="col-lg-3 col-md-offset-3">
           <form name="form" onSubmit={this.handleSubmit}>
             <div>
               <input

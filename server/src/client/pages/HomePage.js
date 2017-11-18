@@ -33,6 +33,7 @@ class HomePage extends Component {
         {this.head()}
         <CreateTask />
         <h2>List of Tasks:</h2>
+        <h6>Click to change the task status</h6>
         <ul>{this.renderTasks()}</ul>
       </div>
     );

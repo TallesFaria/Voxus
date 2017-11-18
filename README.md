@@ -22,6 +22,10 @@ Go to localhost:3000
 * Task 4:
 * Task 5: 
 
+### Features ###
+* Click on the task to change their status
+* Server Side Rendering: render data on the server and display content for the user as soon as possible
+* Easy to scale Server Renderer or Api Server - decoupled 
 
 ### Code Structure ###
 

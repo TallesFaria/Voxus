@@ -9766,7 +9766,7 @@ var FormTask = function (_Component) {
         null,
         _react2.default.createElement(
           "div",
-          { className: "col-md-6 col-md-offset-3" },
+          { className: "col-lg-3 col-md-offset-3" },
           _react2.default.createElement(
             "form",
             { name: "form", onSubmit: this.handleSubmit },
@@ -41777,7 +41777,7 @@ var Header = function Header(_ref) {
     null,
     _react2.default.createElement(
       'div',
-      { className: 'nav-wrapper' },
+      { className: 'nav-wrapper cyan lighten-2' },
       _react2.default.createElement(
         _reactRouterDom.Link,
         { to: '/', className: 'brand-logo' },
@@ -42253,6 +42253,11 @@ var HomePage = function (_Component) {
           'h2',
           null,
           'List of Tasks:'
+        ),
+        _react2.default.createElement(
+          'h6',
+          null,
+          'Click to change the task status'
         ),
         _react2.default.createElement(
           'ul',
@@ -43658,80 +43663,93 @@ var Task = function (_Component) {
 
       return _react2.default.createElement(
         "div",
-        { key: id, className: "horizontal" },
-        _react2.default.createElement("br", null),
-        this.state.done ? _react2.default.createElement(
-          "button",
-          {
-            className: "btn red",
-            onClick: function onClick() {
-              _this2.setState({ done: false });
-              isDone(i, done, id);
-            }
-          },
-          _react2.default.createElement(
-            "h6",
-            { style: { textDecoration: "line-through" } },
-            this.state.name
-          )
-        ) : _react2.default.createElement(
-          "h6",
-          null,
-          _react2.default.createElement(
-            "button",
-            {
-              className: "btn",
-              onClick: function onClick() {
-                _this2.setState({ done: true });
-                isDone(i, done, id);
-              }
-            },
-            this.state.name
-          )
-        ),
-        _react2.default.createElement("br", null),
+        { "class": "row" },
         _react2.default.createElement(
-          "p",
-          null,
-          this.state.description
-        ),
-        _react2.default.createElement(
-          "p",
-          null,
+          "div",
+          { "class": "col s12 m6 " },
           _react2.default.createElement(
-            "strong",
-            null,
-            "Priority "
-          ),
-          this.state.priority,
-          "s"
-        ),
-        _react2.default.createElement("br", null),
-        _react2.default.createElement(
-          "button",
-          { className: "btn" },
-          _react2.default.createElement("input", { type: "file", onChange: this.handleFileUpload.bind(this) })
-        ),
-        this.uploadFile(),
-        _react2.default.createElement("br", null),
-        _react2.default.createElement(
-          _reactRouterDom.Link,
-          { className: "btn", to: "/edit/" + id },
-          _react2.default.createElement(
-            "i",
-            { className: "material-icons" },
-            "edit"
-          )
-        ),
-        _react2.default.createElement(
-          "button",
-          { className: "btn red", onClick: function onClick() {
-              return deleteTask(i);
-            } },
-          _react2.default.createElement(
-            "i",
-            { className: "material-icons" },
-            "delete_forever"
+            "div",
+            { key: id, className: "card cyan lighten-5 " },
+            _react2.default.createElement("br", null),
+            this.state.done ? _react2.default.createElement(
+              "button",
+              {
+                className: "btn red",
+                onClick: function onClick() {
+                  _this2.setState({ done: false });
+                  isDone(i, done, id);
+                }
+              },
+              _react2.default.createElement(
+                "h6",
+                { style: { textDecoration: "line-through" } },
+                this.state.name
+              )
+            ) : _react2.default.createElement(
+              "h6",
+              null,
+              _react2.default.createElement(
+                "button",
+                {
+                  className: "btn",
+                  onClick: function onClick() {
+                    _this2.setState({ done: true });
+                    isDone(i, done, id);
+                  }
+                },
+                this.state.name
+              )
+            ),
+            _react2.default.createElement("br", null),
+            _react2.default.createElement(
+              "p",
+              { "flow-text": true },
+              _react2.default.createElement(
+                "strong",
+                null,
+                "Description: "
+              ),
+              this.state.description
+            ),
+            _react2.default.createElement(
+              "p",
+              null,
+              _react2.default.createElement(
+                "strong",
+                null,
+                "Priority: "
+              ),
+              this.state.priority,
+              "s"
+            ),
+            _react2.default.createElement(
+              "button",
+              { className: "btn" },
+              _react2.default.createElement("input", { type: "file", onChange: this.handleFileUpload.bind(this) })
+            ),
+            this.uploadFile(),
+            _react2.default.createElement("br", null),
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { className: "btn", to: "/edit/" + id },
+              _react2.default.createElement(
+                "i",
+                { className: "material-icons" },
+                "edit"
+              )
+            ),
+            _react2.default.createElement(
+              "button",
+              { className: "btn red", onClick: function onClick() {
+                  return deleteTask(i);
+                } },
+              _react2.default.createElement(
+                "i",
+                { className: "material-icons" },
+                "delete_forever"
+              )
+            ),
+            _react2.default.createElement("br", null)
           )
         )
       );
