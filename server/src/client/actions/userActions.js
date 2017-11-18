@@ -67,7 +67,7 @@ export const createTask = task => async (dispatch, getState, api) => {
     name: task.taskName || "",
     description: task.description || "",
     priority: task.priority || 0,
-    submittedByUser: task.submittedByUser || "",
+    createdBy: task.createBy || "",
     done: task.done || false,
     files: task.files || [],
     id: res.data._id
@@ -105,9 +105,13 @@ export const updateTask = data => async (dispatch, getState, api) => {
   });
 };
 
-export const isDone = (index, done, id) => async (dispatch, getState, api) => {
+export const isDone = (index, done, id, auth) => async (
+  dispatch,
+  getState,
+  api
+) => {
   console.log(index);
-  await api.post("/done", { done: !done, id });
+  await api.post("/done", { done: !done, id, doneBy: auth });
 
   dispatch({
     type: DONE,
@@ -143,9 +147,17 @@ export const uploadDocumentRequest = ({ file, name }) => async (
   }
 };
 
+
 export const fetchCurrentUser = () => async (dispatch, getState, api) => {
-  const res = await api.get("/current_user");
-  console.log("=============USER=====================");
+  console.log("=============ACTION USER=====================");
+  let res;
+  try {
+    res = await api.get("/current_user");
+  } catch (err) {
+    console.log("===========ERROR IN LOG IN======================");
+    console.log(err);
+    console.log("====================================");
+  }
   console.log(res);
   console.log("====================================");
   dispatch({

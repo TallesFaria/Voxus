@@ -103,7 +103,7 @@ module.exports = app => {
             name: req.body.taskName,
             description: req.body.description,
             priority: req.body.priority,
-            submittedByUser: req.body.submittedByUser
+            createdBy: req.body.createdBy
           }
         }
       },
@@ -111,7 +111,7 @@ module.exports = app => {
         console.log('==============RESPONSE UPDATE=================');
         console.log(resp);
         console.log('====================================');
-        res.send(resp);
+        res.redirect('/');
       }
     );
   });
@@ -139,7 +139,8 @@ module.exports = app => {
         id: req.body.id,
         body: {
           doc: {
-            done: req.body.done
+            done: req.body.done,
+            doneBy: req.body.doneBy
           }
         }
       },

@@ -26,9 +26,13 @@ class Task extends Component {
 
   handleFileUpload(e) {
     e.preventDefault();
+    // this.props.uploadDocumentRequest({
+    //   file: e.target.files[0],
+    //   name: e.target.files[0].name,
+    //   id: this.props.id
+    // });
     this.props.uploadDocumentRequest({
-      file: e.target.files[0],
-      name: e.target.files[0].name,
+      files: e.target.files,
       id: this.props.id
     });
   }
@@ -47,6 +51,7 @@ class Task extends Component {
       isDone,
       updateTask,
       deleteTask,
+      auth,
       i
     } = this.props;
 
@@ -55,8 +60,8 @@ class Task extends Component {
     console.log("====================================");
     
     return (
-      <div class="row">
-        <div class="col s12 m6 ">
+      <div className="row">
+        <div className="col s12 m6 ">
           <div key={id} className="card cyan lighten-5 ">
             <br />
             {this.state.done ? (
@@ -64,7 +69,7 @@ class Task extends Component {
                 className="btn red"
                 onClick={() => {
                   this.setState({ done: false });
-                  isDone(i, done, id);
+                  isDone(i, done, id, auth);
                 }}
               >
                 <h6 style={{ textDecoration: "line-through" }}>
@@ -77,7 +82,7 @@ class Task extends Component {
                   className="btn"
                   onClick={() => {
                     this.setState({ done: true });
-                    isDone(i, done, id);
+                    isDone(i, done, id, auth);
                   }}
                 >
                   {this.state.name}
@@ -85,16 +90,16 @@ class Task extends Component {
               </h6>
             )}
             <br />
-            <p flow-text>
+            <p>
               <strong>Description: </strong>
               {this.state.description}
             </p>
-            <p>
+            <p className="flow-text">
               <strong>Priority: </strong>
-              {this.state.priority}s
+              {this.state.priority}
             </p>
             <button className="btn">
-              <input type="file" onChange={this.handleFileUpload.bind(this)} />
+              <input type="file" onChange={this.handleFileUpload.bind(this)} multiple/>
             </button>
             {this.uploadFile()}
             <br />
@@ -113,7 +118,7 @@ class Task extends Component {
 }
 
 function mapStateToProps(state) {
-  return { upload: state.upload };
+  return { upload: state.upload, auth: state.auth };
 }
 
 export default connect(mapStateToProps, {

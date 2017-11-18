@@ -30,6 +30,9 @@ module.exports = app => {
   });
 
   app.get('/current_user', (req, res) => {
+    console.log('===============CURRENT USER API===================');
+    console.log(req.user);
+    console.log('====================================');
     res.send(req.user);
   });
 };

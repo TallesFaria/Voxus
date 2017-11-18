@@ -2,6 +2,7 @@
 
 
 # How to use it? #
+* 1: SSR + Client:
 
 Change directory into Server
 
@@ -11,21 +12,50 @@ Run: npm run dev
 
 Go to localhost:3000
 
+* 2: API Server:
+Change directory into Api
+
+Install all dependencies: npm install 
+
+Run: npm run dev
+
+Go to localhost:4000
+
+* 3: Install Elastic Search and run it locally
+https://www.elastic.co/
+
+* 4: Run mongodb locally
+
+* Amazon S3 Credentials at amazonS3.json inside API folder
+
 * Client: localhost:3000
 * API Server: localhost:4000
 
 ### Time to complete Task ###
 
-* Task 1:
-* Task 2:
-* Task 3:
-* Task 4:
-* Task 5: 
+* Task 1: SSR + CRUD = 10h
+    Suport for CRUD operations + Server Side Rendering
 
+* Task 2: API + OAUTH = 8h
+    Suport for OAuth - gmail
+
+* Task 3: More Complex Tasks: 3h
+    Description: ok, priority: ok, user that submitted task: ok
+* Task 4: Done: 1h
+    Users can mark task as done - register the user 
+
+* Task 5: 
+    
 ### Features ###
 * Click on the task to change their status
+* Materialize - Modern styling
+
+# Performance #
 * Server Side Rendering: render data on the server and display content for the user as soon as possible
 * Easy to scale Server Renderer or Api Server - decoupled 
+
+### Challenges ###
+* Time manage
 
 ### Code Structure ###
 
