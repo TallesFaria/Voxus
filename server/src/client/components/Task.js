@@ -1,18 +1,29 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import {
   updateTask,
   deleteTask,
   isDone,
   uploadDocumentRequest
-} from '../actions';
+} from "../actions";
 import {
   UPLOAD_DOCUMENT_SUCCESS,
   UPLOAD_DOCUMENT_FAIL
-} from '../actions/types';
+} from "../actions/types";
 
 class Task extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      done: this.props.task.done,
+      name: this.props.task.name,
+      description: this.props.task.description,
+      priority: this.props.task.priority
+    };
+  }
+
   handleFileUpload(e) {
     e.preventDefault();
     this.props.uploadDocumentRequest({
@@ -39,29 +50,43 @@ class Task extends Component {
       i
     } = this.props;
 
-    console.log('===============TASK==================');
+    console.log("===============TASK==================");
     console.log(name, description);
-    console.log('====================================');
+    console.log("====================================");
 
     return (
       <div key={id} className="horizontal">
         <br />
-        {done ? (
-          <button className="btn red" onClick={() => isDone(i, done)}>
-            <h6>{name}</h6>
+        {this.state.done ? (
+          <button
+            className="btn red"
+            onClick={() => {
+              this.setState({ done: false });
+              isDone(i, done, id);
+            }}
+          >
+            <h6 style={{ textDecoration: "line-through" }}>
+              {this.state.name}
+            </h6>
           </button>
         ) : (
           <h6>
-            <button className="btn" onClick={() => isDone(i, done)}>
-              {name}
+            <button
+              className="btn"
+              onClick={() => {
+                this.setState({ done: true });
+                isDone(i, done, id);
+              }}
+            >
+              {this.state.name}
             </button>
           </h6>
         )}
         <br />
-        <p>{description}</p>
+        <p>{this.state.description}</p>
         <p>
           <strong>Priority </strong>
-          {priority}
+          {this.state.priority}s
         </p>
         <br />
         <button className="btn">
@@ -72,7 +97,7 @@ class Task extends Component {
         <Link className="btn" to={`/edit/${id}`}>
           <i className="material-icons">edit</i>
         </Link>
-        <button className="btn red" onClick={() => deleteTask(i, id)}>
+        <button className="btn red" onClick={() => deleteTask(i)}>
           <i className="material-icons">delete_forever</i>
         </button>
       </div>

@@ -90,6 +90,9 @@ module.exports = app => {
   });
 
   app.post('/update-task', (req, res) => {
+    console.log('===========UPDATE API=====================');
+    console.log(req.body);
+    console.log('====================================');
     ElasticClient.update(
       {
         index: 'tasks',
@@ -97,7 +100,7 @@ module.exports = app => {
         id: req.body.id,
         body: {
           doc: {
-            name: req.body.name,
+            name: req.body.taskName,
             description: req.body.description,
             priority: req.body.priority,
             submittedByUser: req.body.submittedByUser
@@ -126,6 +129,9 @@ module.exports = app => {
   // app.post('/upload', multipartMiddleware, Upload.upload)
 
   app.post('/done', (req, res) => {
+    console.log('===========DONE API======================');
+    console.log(req.body);
+    console.log('====================================');
     ElasticClient.update(
       {
         index: 'tasks',

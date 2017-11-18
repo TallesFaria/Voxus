@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   FETCH_CURRENT_USER,
   FETCH_TASKS,
@@ -10,25 +10,25 @@ import {
   UPLOAD_DOCUMENT_SUCCESS,
   UPLOAD_DOCUMENT_FAIL,
   DONE
-} from './types';
+} from "./types";
 
 export const fetchTasks = () => async (dispatch, getState, api) => {
-  const res = await api.get('/tasks');
+  const res = await api.get("/tasks");
   const tasksList = [];
   res.data.hits.map(task =>
     tasksList.push({
-      name: task._source.name || '',
-      description: task._source.description || '',
+      name: task._source.name || "",
+      description: task._source.description || "",
       priority: task._source.priority || 0,
-      submittedByUser: task._source.submittedByUser || '',
+      submittedByUser: task._source.submittedByUser || "",
       done: task._source.done || false,
       files: task._source.files || [],
       id: task._id
     })
   );
-  console.log('================list of tasks================');
+  console.log("================list of tasks================");
   console.log(tasksList);
-  console.log('====================================');
+  console.log("====================================");
   dispatch({
     type: FETCH_TASKS,
     payload: tasksList
@@ -36,13 +36,13 @@ export const fetchTasks = () => async (dispatch, getState, api) => {
 };
 
 export const fetchTask = id => async (dispatch, getState, api) => {
-  const { data } = await api.post('/fetch-task', { id });
+  const { data } = await api.post("/fetch-task", { id });
 
   const task = {
-    name: data._source.name || '',
-    description: data._source.description || '',
+    name: data._source.name || "",
+    description: data._source.description || "",
     priority: data._source.priority || 0,
-    submittedByUser: data._source.submittedByUser || '',
+    submittedByUser: data._source.submittedByUser || "",
     done: data._source.done || false,
     files: data._source.files || [],
     id
@@ -55,19 +55,19 @@ export const fetchTask = id => async (dispatch, getState, api) => {
 };
 
 export const createTask = task => async (dispatch, getState, api) => {
-  const res = await api.post('/new-task', {
+  const res = await api.post("/new-task", {
     ...task
   });
 
-  console.log('==============CREATE==================');
+  console.log("==============CREATE==================");
   console.log(res);
-  console.log('====================================');
+  console.log("====================================");
 
   const addedTask = {
-    name: task.taskName || '',
-    description: task.description || '',
+    name: task.taskName || "",
+    description: task.description || "",
     priority: task.priority || 0,
-    submittedByUser: task.submittedByUser || '',
+    submittedByUser: task.submittedByUser || "",
     done: task.done || false,
     files: task.files || [],
     id: res.data._id
@@ -80,7 +80,7 @@ export const createTask = task => async (dispatch, getState, api) => {
 
 export const deleteTask = (index, id) => async (dispatch, getState, api) => {
   console.log(index);
-  const res = await api.post('/delete', { id });
+  const res = await api.post("/delete", { id });
 
   dispatch({
     type: DELETE_TASK,
@@ -89,11 +89,11 @@ export const deleteTask = (index, id) => async (dispatch, getState, api) => {
 };
 
 export const updateTask = data => async (dispatch, getState, api) => {
-  await api.post('/update-task', data);
+  await api.post("/update-task", data);
 
   const task = {
-    name: data.taskName || '',
-    description: data.description || '',
+    name: data.taskName || "",
+    description: data.description || "",
     priority: data.priority || 0,
     done: false,
     id: data.id
@@ -105,9 +105,9 @@ export const updateTask = data => async (dispatch, getState, api) => {
   });
 };
 
-export const isDone = (index, done) => async (dispatch, getState, api) => {
+export const isDone = (index, done, id) => async (dispatch, getState, api) => {
   console.log(index);
-  await api.post('/done', !done);
+  await api.post("/done", { done: !done, id });
 
   dispatch({
     type: DONE,
@@ -122,15 +122,15 @@ export const uploadDocumentRequest = ({ file, name }) => async (
   api
 ) => {
   let data = new FormData();
-  data.append('file', document);
-  data.append('name', name);
+  data.append("file", document);
+  data.append("name", name);
   let res;
 
   try {
-    res = await api.post('/upload', data);
-    console.log('====================================');
+    res = await api.post("/upload", data);
+    console.log("====================================");
     console.log(res);
-    console.log('====================================');
+    console.log("====================================");
     return {
       type: UPLOAD_DOCUMENT_SUCCESS,
       payload: true
@@ -144,10 +144,10 @@ export const uploadDocumentRequest = ({ file, name }) => async (
 };
 
 export const fetchCurrentUser = () => async (dispatch, getState, api) => {
-  const res = await api.get('/current_user');
-console.log('=============USER=====================');
-console.log(res);
-console.log('====================================');
+  const res = await api.get("/current_user");
+  console.log("=============USER=====================");
+  console.log(res);
+  console.log("====================================");
   dispatch({
     type: FETCH_CURRENT_USER,
     payload: res

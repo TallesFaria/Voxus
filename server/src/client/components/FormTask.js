@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 
 class FormTask extends Component {
   constructor(props) {
@@ -6,11 +7,12 @@ class FormTask extends Component {
     this.state = {
       taskName: props.task.name,
       description: props.task.description,
-      priority: props.task.priority
+      priority: props.task.priority,
+      saved: false
     };
-    console.log('===========STATE======================')
-    console.log(this.state)
-    console.log('====================================')
+    console.log("===========STATE======================");
+    console.log(this.state);
+    console.log("====================================");
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,17 +27,27 @@ class FormTask extends Component {
     e.preventDefault();
     this.props.onSubmit(this.state);
     this.setState({
-      taskName: '',
-      description: '',
-      priority: ''
+      taskName: "",
+      description: "",
+      priority: ""
     });
+  }
+
+  renderWarning() {
+    if (this.state.saved) {
+      return (
+        <div>
+          <h4>Data Saved</h4>
+          <a href="/">List of Tasks</a>
+        </div>
+      );
+    }
   }
 
   render() {
     return (
       <div>
         <div className="col-md-6 col-md-offset-3">
-          
           <form name="form" onSubmit={this.handleSubmit}>
             <div>
               <input
@@ -70,8 +82,16 @@ class FormTask extends Component {
               />
             </div>
             <div className="form-group">
-              <button className="btn btn-primary">Submit</button>
+              <a href="/">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => this.setState({ saved: true })}
+                >
+                  Submit
+                </button>
+              </a>
             </div>
+            {this.renderWarning()}
           </form>
         </div>
       </div>

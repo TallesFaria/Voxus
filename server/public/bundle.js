@@ -9681,6 +9681,8 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(91);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -9702,11 +9704,12 @@ var FormTask = function (_Component) {
     _this.state = {
       taskName: props.task.name,
       description: props.task.description,
-      priority: props.task.priority
+      priority: props.task.priority,
+      saved: false
     };
-    console.log('===========STATE======================');
+    console.log("===========STATE======================");
     console.log(_this.state);
-    console.log('====================================');
+    console.log("====================================");
 
     _this.handleChange = _this.handleChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
@@ -9714,7 +9717,7 @@ var FormTask = function (_Component) {
   }
 
   _createClass(FormTask, [{
-    key: 'handleChange',
+    key: "handleChange",
     value: function handleChange(e) {
       var _e$target = e.target,
           name = _e$target.name,
@@ -9723,75 +9726,107 @@ var FormTask = function (_Component) {
       this.setState(_defineProperty({}, name, value));
     }
   }, {
-    key: 'handleSubmit',
+    key: "handleSubmit",
     value: function handleSubmit(e) {
       e.preventDefault();
       this.props.onSubmit(this.state);
       this.setState({
-        taskName: '',
-        description: '',
-        priority: ''
+        taskName: "",
+        description: "",
+        priority: ""
       });
     }
   }, {
-    key: 'render',
+    key: "renderWarning",
+    value: function renderWarning() {
+      if (this.state.saved) {
+        return _react2.default.createElement(
+          "div",
+          null,
+          _react2.default.createElement(
+            "h4",
+            null,
+            "Data Saved"
+          ),
+          _react2.default.createElement(
+            "a",
+            { href: "/" },
+            "List of Tasks"
+          )
+        );
+      }
+    }
+  }, {
+    key: "render",
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
-        'div',
+        "div",
         null,
         _react2.default.createElement(
-          'div',
-          { className: 'col-md-6 col-md-offset-3' },
+          "div",
+          { className: "col-md-6 col-md-offset-3" },
           _react2.default.createElement(
-            'form',
-            { name: 'form', onSubmit: this.handleSubmit },
+            "form",
+            { name: "form", onSubmit: this.handleSubmit },
             _react2.default.createElement(
-              'div',
+              "div",
               null,
-              _react2.default.createElement('input', {
-                type: 'text',
-                className: 'form-control',
-                name: 'taskName',
+              _react2.default.createElement("input", {
+                type: "text",
+                className: "form-control",
+                name: "taskName",
                 value: this.state.taskName,
                 onChange: this.handleChange,
-                placeholder: 'Task Name'
+                placeholder: "Task Name"
               })
             ),
             _react2.default.createElement(
-              'div',
+              "div",
               null,
-              _react2.default.createElement('br', null),
-              _react2.default.createElement('input', {
-                type: 'text',
-                className: 'form-control',
-                name: 'description',
+              _react2.default.createElement("br", null),
+              _react2.default.createElement("input", {
+                type: "text",
+                className: "form-control",
+                name: "description",
                 value: this.state.description,
                 onChange: this.handleChange,
-                placeholder: 'description'
+                placeholder: "description"
               })
             ),
             _react2.default.createElement(
-              'div',
+              "div",
               null,
-              _react2.default.createElement('br', null),
-              _react2.default.createElement('input', {
-                type: 'text',
-                className: 'form-control',
-                name: 'priority',
+              _react2.default.createElement("br", null),
+              _react2.default.createElement("input", {
+                type: "text",
+                className: "form-control",
+                name: "priority",
                 value: this.state.priority,
                 onChange: this.handleChange,
-                placeholder: 'Priority'
+                placeholder: "Priority"
               })
             ),
             _react2.default.createElement(
-              'div',
-              { className: 'form-group' },
+              "div",
+              { className: "form-group" },
               _react2.default.createElement(
-                'button',
-                { className: 'btn btn-primary' },
-                'Submit'
+                "a",
+                { href: "/" },
+                _react2.default.createElement(
+                  "button",
+                  {
+                    className: "btn btn-primary",
+                    onClick: function onClick() {
+                      return _this2.setState({ saved: true });
+                    }
+                  },
+                  "Submit"
+                )
               )
-            )
+            ),
+            this.renderWarning()
           )
         )
       );
@@ -41802,7 +41837,7 @@ var fetchTasks = exports.fetchTasks = function fetchTasks() {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return api.get('/tasks');
+              return api.get("/tasks");
 
             case 2:
               res = _context.sent;
@@ -41810,25 +41845,25 @@ var fetchTasks = exports.fetchTasks = function fetchTasks() {
 
               res.data.hits.map(function (task) {
                 return tasksList.push({
-                  name: task._source.name || '',
-                  description: task._source.description || '',
+                  name: task._source.name || "",
+                  description: task._source.description || "",
                   priority: task._source.priority || 0,
-                  submittedByUser: task._source.submittedByUser || '',
+                  submittedByUser: task._source.submittedByUser || "",
                   done: task._source.done || false,
                   files: task._source.files || [],
                   id: task._id
                 });
               });
-              console.log('================list of tasks================');
+              console.log("================list of tasks================");
               console.log(tasksList);
-              console.log('====================================');
+              console.log("====================================");
               dispatch({
                 type: _types.FETCH_TASKS,
                 payload: tasksList
               });
 
             case 9:
-            case 'end':
+            case "end":
               return _context.stop();
           }
         }
@@ -41851,16 +41886,16 @@ var fetchTask = exports.fetchTask = function fetchTask(id) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return api.post('/fetch-task', { id: id });
+              return api.post("/fetch-task", { id: id });
 
             case 2:
               _ref3 = _context2.sent;
               data = _ref3.data;
               task = {
-                name: data._source.name || '',
-                description: data._source.description || '',
+                name: data._source.name || "",
+                description: data._source.description || "",
                 priority: data._source.priority || 0,
-                submittedByUser: data._source.submittedByUser || '',
+                submittedByUser: data._source.submittedByUser || "",
                 done: data._source.done || false,
                 files: data._source.files || [],
                 id: id
@@ -41873,7 +41908,7 @@ var fetchTask = exports.fetchTask = function fetchTask(id) {
               });
 
             case 6:
-            case 'end':
+            case "end":
               return _context2.stop();
           }
         }
@@ -41895,21 +41930,21 @@ var createTask = exports.createTask = function createTask(task) {
           switch (_context3.prev = _context3.next) {
             case 0:
               _context3.next = 2;
-              return api.post('/new-task', _extends({}, task));
+              return api.post("/new-task", _extends({}, task));
 
             case 2:
               res = _context3.sent;
 
 
-              console.log('==============CREATE==================');
+              console.log("==============CREATE==================");
               console.log(res);
-              console.log('====================================');
+              console.log("====================================");
 
               addedTask = {
-                name: task.taskName || '',
-                description: task.description || '',
+                name: task.taskName || "",
+                description: task.description || "",
                 priority: task.priority || 0,
-                submittedByUser: task.submittedByUser || '',
+                submittedByUser: task.submittedByUser || "",
                 done: task.done || false,
                 files: task.files || [],
                 id: res.data._id
@@ -41921,7 +41956,7 @@ var createTask = exports.createTask = function createTask(task) {
               });
 
             case 8:
-            case 'end':
+            case "end":
               return _context3.stop();
           }
         }
@@ -41944,7 +41979,7 @@ var deleteTask = exports.deleteTask = function deleteTask(index, id) {
             case 0:
               console.log(index);
               _context4.next = 3;
-              return api.post('/delete', { id: id });
+              return api.post("/delete", { id: id });
 
             case 3:
               res = _context4.sent;
@@ -41956,7 +41991,7 @@ var deleteTask = exports.deleteTask = function deleteTask(index, id) {
               });
 
             case 5:
-            case 'end':
+            case "end":
               return _context4.stop();
           }
         }
@@ -41978,12 +42013,12 @@ var updateTask = exports.updateTask = function updateTask(data) {
           switch (_context5.prev = _context5.next) {
             case 0:
               _context5.next = 2;
-              return api.post('/update-task', data);
+              return api.post("/update-task", data);
 
             case 2:
               task = {
-                name: data.taskName || '',
-                description: data.description || '',
+                name: data.taskName || "",
+                description: data.description || "",
                 priority: data.priority || 0,
                 done: false,
                 id: data.id
@@ -41996,7 +42031,7 @@ var updateTask = exports.updateTask = function updateTask(data) {
               });
 
             case 4:
-            case 'end':
+            case "end":
               return _context5.stop();
           }
         }
@@ -42009,7 +42044,7 @@ var updateTask = exports.updateTask = function updateTask(data) {
   }();
 };
 
-var isDone = exports.isDone = function isDone(index, done) {
+var isDone = exports.isDone = function isDone(index, done, id) {
   return function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(dispatch, getState, api) {
       return regeneratorRuntime.wrap(function _callee6$(_context6) {
@@ -42018,7 +42053,7 @@ var isDone = exports.isDone = function isDone(index, done) {
             case 0:
               console.log(index);
               _context6.next = 3;
-              return api.post('/done', !done);
+              return api.post("/done", { done: !done, id: id });
 
             case 3:
 
@@ -42029,7 +42064,7 @@ var isDone = exports.isDone = function isDone(index, done) {
               });
 
             case 4:
-            case 'end':
+            case "end":
               return _context6.stop();
           }
         }
@@ -42054,34 +42089,34 @@ var uploadDocumentRequest = exports.uploadDocumentRequest = function uploadDocum
             case 0:
               data = new FormData();
 
-              data.append('file', document);
-              data.append('name', name);
+              data.append("file", document);
+              data.append("name", name);
               res = void 0;
               _context7.prev = 4;
               _context7.next = 7;
-              return api.post('/upload', data);
+              return api.post("/upload", data);
 
             case 7:
               res = _context7.sent;
 
-              console.log('====================================');
+              console.log("====================================");
               console.log(res);
-              console.log('====================================');
-              return _context7.abrupt('return', {
+              console.log("====================================");
+              return _context7.abrupt("return", {
                 type: _types.UPLOAD_DOCUMENT_SUCCESS,
                 payload: true
               });
 
             case 14:
               _context7.prev = 14;
-              _context7.t0 = _context7['catch'](4);
-              return _context7.abrupt('return', {
+              _context7.t0 = _context7["catch"](4);
+              return _context7.abrupt("return", {
                 type: _types.UPLOAD_DOCUMENT_FAIL,
                 payload: false
               });
 
             case 17:
-            case 'end':
+            case "end":
               return _context7.stop();
           }
         }
@@ -42103,21 +42138,21 @@ var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
           switch (_context8.prev = _context8.next) {
             case 0:
               _context8.next = 2;
-              return api.get('/current_user');
+              return api.get("/current_user");
 
             case 2:
               res = _context8.sent;
 
-              console.log('=============USER=====================');
+              console.log("=============USER=====================");
               console.log(res);
-              console.log('====================================');
+              console.log("====================================");
               dispatch({
                 type: _types.FETCH_CURRENT_USER,
                 payload: res
               });
 
             case 7:
-            case 'end':
+            case "end":
               return _context8.stop();
           }
         }
@@ -43560,14 +43595,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Task = function (_Component) {
   _inherits(Task, _Component);
 
-  function Task() {
+  function Task(props) {
     _classCallCheck(this, Task);
 
-    return _possibleConstructorReturn(this, (Task.__proto__ || Object.getPrototypeOf(Task)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Task.__proto__ || Object.getPrototypeOf(Task)).call(this, props));
+
+    _this.state = {
+      done: _this.props.task.done,
+      name: _this.props.task.name,
+      description: _this.props.task.description,
+      priority: _this.props.task.priority
+    };
+    return _this;
   }
 
   _createClass(Task, [{
-    key: 'handleFileUpload',
+    key: "handleFileUpload",
     value: function handleFileUpload(e) {
       e.preventDefault();
       this.props.uploadDocumentRequest({
@@ -43577,23 +43620,25 @@ var Task = function (_Component) {
       });
     }
   }, {
-    key: 'uploadFile',
+    key: "uploadFile",
     value: function uploadFile() {
       if (this.props.upload === _types.UPLOAD_DOCUMENT_SUCCESS) return _react2.default.createElement(
-        'div',
+        "div",
         null,
-        'Upload successfull'
+        "Upload successfull"
       );
       if (this.props.upload === _types.UPLOAD_DOCUMENT_FAIL) return _react2.default.createElement(
-        'div',
+        "div",
         null,
-        'Upload failed'
+        "Upload failed"
       );
-      return _react2.default.createElement('div', null);
+      return _react2.default.createElement("div", null);
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
+      var _this2 = this;
+
       var _props = this.props,
           _props$task = _props.task,
           id = _props$task.id,
@@ -43607,77 +43652,86 @@ var Task = function (_Component) {
           i = _props.i;
 
 
-      console.log('===============TASK==================');
+      console.log("===============TASK==================");
       console.log(name, description);
-      console.log('====================================');
+      console.log("====================================");
 
       return _react2.default.createElement(
-        'div',
-        { key: id, className: 'horizontal' },
-        _react2.default.createElement('br', null),
-        done ? _react2.default.createElement(
-          'button',
-          { className: 'btn red', onClick: function onClick() {
-              return isDone(i, done);
-            } },
+        "div",
+        { key: id, className: "horizontal" },
+        _react2.default.createElement("br", null),
+        this.state.done ? _react2.default.createElement(
+          "button",
+          {
+            className: "btn red",
+            onClick: function onClick() {
+              _this2.setState({ done: false });
+              isDone(i, done, id);
+            }
+          },
           _react2.default.createElement(
-            'h6',
-            null,
-            name
+            "h6",
+            { style: { textDecoration: "line-through" } },
+            this.state.name
           )
         ) : _react2.default.createElement(
-          'h6',
+          "h6",
           null,
           _react2.default.createElement(
-            'button',
-            { className: 'btn', onClick: function onClick() {
-                return isDone(i, done);
-              } },
-            name
+            "button",
+            {
+              className: "btn",
+              onClick: function onClick() {
+                _this2.setState({ done: true });
+                isDone(i, done, id);
+              }
+            },
+            this.state.name
           )
         ),
-        _react2.default.createElement('br', null),
+        _react2.default.createElement("br", null),
         _react2.default.createElement(
-          'p',
+          "p",
           null,
-          description
+          this.state.description
         ),
         _react2.default.createElement(
-          'p',
+          "p",
           null,
           _react2.default.createElement(
-            'strong',
+            "strong",
             null,
-            'Priority '
+            "Priority "
           ),
-          priority
+          this.state.priority,
+          "s"
         ),
-        _react2.default.createElement('br', null),
+        _react2.default.createElement("br", null),
         _react2.default.createElement(
-          'button',
-          { className: 'btn' },
-          _react2.default.createElement('input', { type: 'file', onChange: this.handleFileUpload.bind(this) })
+          "button",
+          { className: "btn" },
+          _react2.default.createElement("input", { type: "file", onChange: this.handleFileUpload.bind(this) })
         ),
         this.uploadFile(),
-        _react2.default.createElement('br', null),
+        _react2.default.createElement("br", null),
         _react2.default.createElement(
           _reactRouterDom.Link,
-          { className: 'btn', to: '/edit/' + id },
+          { className: "btn", to: "/edit/" + id },
           _react2.default.createElement(
-            'i',
-            { className: 'material-icons' },
-            'edit'
+            "i",
+            { className: "material-icons" },
+            "edit"
           )
         ),
         _react2.default.createElement(
-          'button',
-          { className: 'btn red', onClick: function onClick() {
-              return deleteTask(i, id);
+          "button",
+          { className: "btn red", onClick: function onClick() {
+              return deleteTask(i);
             } },
           _react2.default.createElement(
-            'i',
-            { className: 'material-icons' },
-            'delete_forever'
+            "i",
+            { className: "material-icons" },
+            "delete_forever"
           )
         )
       );
