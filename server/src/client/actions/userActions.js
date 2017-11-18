@@ -120,18 +120,22 @@ export const isDone = (index, done, id, auth) => async (
   });
 };
 
-export const uploadDocumentRequest = ({ file, name }) => async (
+export const uploadDocumentRequest = ({ files, id }) => async (
   dispatch,
   getState,
   api
 ) => {
   let data = new FormData();
-  data.append("file", document);
-  data.append("name", name);
+  for (let x = 0; x < files.length; x++) {
+    //add to list
+    const li = document.createElement("li");
+    li.innerHTML = "File " + (x + 1) + ":  " + files[x].name;
+    data.append(li);
+  }
   let res;
 
   try {
-    res = await api.post("/upload", data);
+    res = await api.post("/upload", { data, id });
     console.log("====================================");
     console.log(res);
     console.log("====================================");
@@ -146,6 +150,10 @@ export const uploadDocumentRequest = ({ file, name }) => async (
     };
   }
 };
+
+
+
+
 
 
 export const fetchCurrentUser = () => async (dispatch, getState, api) => {

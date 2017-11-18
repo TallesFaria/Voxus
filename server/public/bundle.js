@@ -42078,25 +42078,30 @@ var isDone = exports.isDone = function isDone(index, done, id, auth) {
 };
 
 var uploadDocumentRequest = exports.uploadDocumentRequest = function uploadDocumentRequest(_ref8) {
-  var file = _ref8.file,
-      name = _ref8.name;
+  var files = _ref8.files,
+      id = _ref8.id;
   return function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(dispatch, getState, api) {
-      var data, res;
+      var data, x, li, res;
       return regeneratorRuntime.wrap(function _callee7$(_context7) {
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
               data = new FormData();
 
-              data.append("file", document);
-              data.append("name", name);
-              res = void 0;
-              _context7.prev = 4;
-              _context7.next = 7;
-              return api.post("/upload", data);
+              for (x = 0; x < files.length; x++) {
+                //add to list
+                li = document.createElement("li");
 
-            case 7:
+                li.innerHTML = "File " + (x + 1) + ":  " + files[x].name;
+                data.append(li);
+              }
+              res = void 0;
+              _context7.prev = 3;
+              _context7.next = 6;
+              return api.post("/upload", { data: data, id: id });
+
+            case 6:
               res = _context7.sent;
 
               console.log("====================================");
@@ -42107,20 +42112,20 @@ var uploadDocumentRequest = exports.uploadDocumentRequest = function uploadDocum
                 payload: true
               });
 
-            case 14:
-              _context7.prev = 14;
-              _context7.t0 = _context7["catch"](4);
+            case 13:
+              _context7.prev = 13;
+              _context7.t0 = _context7["catch"](3);
               return _context7.abrupt("return", {
                 type: _types.UPLOAD_DOCUMENT_FAIL,
                 payload: false
               });
 
-            case 17:
+            case 16:
             case "end":
               return _context7.stop();
           }
         }
-      }, _callee7, undefined, [[4, 14]]);
+      }, _callee7, undefined, [[3, 13]]);
     }));
 
     return function (_x19, _x20, _x21) {

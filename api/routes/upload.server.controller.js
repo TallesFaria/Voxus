@@ -52,17 +52,39 @@ const createItemObject = callback => {
 };
 
 exports.upload = (req, res, next) => {
-  const file = req.body.file; // file passed from client
-  const meta = req.body;
+  const files = req.body.files; // file passed from client
+  //const meta = req.body;
+  let toUpload = [];
 
-  var tmp_path = req.body.file.path;
-  // console.log("item", req.body.file)
-  // image = fs.createReadStream(tmp_path);
-  // image = fs.createReadStream(file);
-  image = file;
-  imageName = meta.name;
+  if (files.length > 0) {
+    _.forEach(files, file => {
+      toUpload.push(awsmainUpload(file));
+    });
+    return [toUpload];
+  } else {
+    return null;
+  }
+
+  // var tmp_path = req.body.file.path;
+  // // console.log("item", req.body.file)
+  // // image = fs.createReadStream(tmp_path);
+  // // image = fs.createReadStream(file);
+  // image = file;
+  // imageName = meta.name;
   id = meta.id;
   console.log(id);
+  
+};
+
+const awsmainUpload = fileDirectory => {
+  const uploadImage = fs.createReadStream(fileDirectory.fd);
+  const fileName = Math.floor(Date.now() / 1000);
+  const params = {
+    Bucket: bucket,
+    Key: fileName + " " + fileDirectory.fileName,
+    Body: uploadImage
+  };
+
   async.series([createMainBucket, createItemObject], (err, result) => {
     if (err) return res.send(err);
     ElasticClient.update(
