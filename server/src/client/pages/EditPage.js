@@ -30,7 +30,6 @@ class EditPage extends Component {
     return (
       <div className="container">
         {this.renderEdit()}
-
         <div className="form-group">
           <Link to="/">
             <button className="btn red">Cancel</button>
@@ -42,14 +41,12 @@ class EditPage extends Component {
 }
 
 function mapStateToProps(state) {
-  return { task: state.task };
+  return { task: state.task, auth: state.auth };
 }
 
 function loadData(store, path) {
   const id = path.slice(0, 5);
-  console.log('================ID=================');
-  console.log(id);
-  console.log('====================================');
+  
   return store.dispatch(fetchTask(id));
 }
 

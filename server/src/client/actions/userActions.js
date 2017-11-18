@@ -26,9 +26,7 @@ export const fetchTasks = () => async (dispatch, getState, api) => {
       id: task._id
     })
   );
-  console.log("================list of tasks================");
-  console.log(tasksList);
-  console.log("====================================");
+
   dispatch({
     type: FETCH_TASKS,
     payload: tasksList
@@ -58,11 +56,9 @@ export const createTask = task => async (dispatch, getState, api) => {
   const res = await api.post("/new-task", {
     ...task
   });
-
-  console.log("==============CREATE==================");
-  console.log(res);
-  console.log("====================================");
-
+  console.log('==========CREATING TASK=======================');
+  console.log('====================================');
+  dispatch(fetchCurrentUser())
   const addedTask = {
     name: task.taskName || "",
     description: task.description || "",
@@ -72,6 +68,8 @@ export const createTask = task => async (dispatch, getState, api) => {
     files: task.files || [],
     id: res.data._id
   };
+  console.log(addedTask);
+  
   dispatch({
     type: CREATE_TASK,
     payload: addedTask
@@ -147,7 +145,6 @@ export const uploadDocumentRequest = ({ file, name, id }) => async (
     };
   }
 };
-
 
 export const fetchCurrentUser = () => async (dispatch, getState, api) => {
   console.log("=============ACTION USER=====================");

@@ -18,10 +18,8 @@ const createMainBucket = callback => {
   };
   s3.headBucket(bucketParams, function(err, data) {
     if (err) {
-      console.log('ErrorHeadBucket', err);
       s3.createBucket(bucketParams, function(err, data) {
         if (err) {
-          console.log('Error', err);
           callback(err, null);
         } else {
           callback(null, data);
@@ -42,10 +40,8 @@ const createItemObject = callback => {
   };
   s3.putObject(params, function(err, data) {
     if (err) {
-      console.log('Error uploading image: ', err);
       callback(err, null);
     } else {
-      console.log('Successfully uploaded image on S3', data);
       callback(null, data);
     }
   });
@@ -56,13 +52,12 @@ exports.upload = (req, res, next) => {
   const meta = req.body;
 
   var tmp_path = req.body.file.path;
-  // console.log("item", req.body.file)
   // image = fs.createReadStream(tmp_path);
   // image = fs.createReadStream(file);
   image = file;
   imageName = meta.name;
   id = meta.id;
-  console.log(id);
+  
   async.series([createMainBucket, createItemObject], (err, result) => {
     if (err) return res.send(err);
     ElasticClient.update(

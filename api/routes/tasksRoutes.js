@@ -42,7 +42,7 @@ module.exports = app => {
           description: req.body.description,
           priority: req.body.priority,
           done: false,
-          submittedByUser: req.body.submittedByUser,
+          createdBy: req.body.createdBy,
           isTask: true
         }
       },
@@ -88,6 +88,7 @@ module.exports = app => {
 
     res.send('Got a DELETE request at /delete');
   });
+
 
   app.post('/update-task', (req, res) => {
     console.log('===========UPDATE API=====================');
@@ -149,22 +150,22 @@ module.exports = app => {
       }
     );
 
-    ElasticClient.index(
-      {
-        index: 'tasks',
-        type: 'task',
-        id: req.body.id,
-        body: {
-          doc: {
-            done: req.body.done,
-            doneBy: req.body.doneBy
-          }
-        }
-      },
-      function(err, resp, status) {
-        console.log(resp);
-      }
-    );
+    // ElasticClient.index(
+    //   {
+    //     index: 'tasks',
+    //     type: 'task',
+    //     id: req.body.id,
+    //     body: {
+    //       doc: {
+    //         done: req.body.done,
+    //         doneBy: req.body.doneBy
+    //       }
+    //     }
+    //   },
+    //   function(err, resp, status) {
+    //     console.log(resp);
+    //   }
+    // );
     res.send('Update - Success');
   });
 

@@ -10,10 +10,7 @@ class FormTask extends Component {
       priority: props.task.priority,
       saved: false
     };
-    console.log("===========STATE======================");
-    console.log(this.state);
-    console.log("====================================");
-
+    
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -73,7 +70,7 @@ class FormTask extends Component {
             <div>
               <br />
               <input
-                type="text"
+                type="number"
                 className="form-control"
                 name="priority"
                 value={this.state.priority}

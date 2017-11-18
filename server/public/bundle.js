@@ -9707,9 +9707,6 @@ var FormTask = function (_Component) {
       priority: props.task.priority,
       saved: false
     };
-    console.log("===========STATE======================");
-    console.log(_this.state);
-    console.log("====================================");
 
     _this.handleChange = _this.handleChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
@@ -9800,7 +9797,7 @@ var FormTask = function (_Component) {
               null,
               _react2.default.createElement("br", null),
               _react2.default.createElement("input", {
-                type: "text",
+                type: "number",
                 className: "form-control",
                 name: "priority",
                 value: this.state.priority,
@@ -41854,15 +41851,13 @@ var fetchTasks = exports.fetchTasks = function fetchTasks() {
                   id: task._id
                 });
               });
-              console.log("================list of tasks================");
-              console.log(tasksList);
-              console.log("====================================");
+
               dispatch({
                 type: _types.FETCH_TASKS,
                 payload: tasksList
               });
 
-            case 9:
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -41935,11 +41930,9 @@ var createTask = exports.createTask = function createTask(task) {
             case 2:
               res = _context3.sent;
 
-
-              console.log("==============CREATE==================");
-              console.log(res);
-              console.log("====================================");
-
+              console.log('==========CREATING TASK=======================');
+              console.log('====================================');
+              dispatch(fetchCurrentUser());
               addedTask = {
                 name: task.taskName || "",
                 description: task.description || "",
@@ -41950,12 +41943,14 @@ var createTask = exports.createTask = function createTask(task) {
                 id: res.data._id
               };
 
+              console.log(addedTask);
+
               dispatch({
                 type: _types.CREATE_TASK,
                 payload: addedTask
               });
 
-            case 8:
+            case 9:
             case "end":
               return _context3.stop();
           }
@@ -43629,7 +43624,8 @@ var Task = function (_Component) {
       done: _this.props.task.done,
       name: _this.props.task.name,
       description: _this.props.task.description,
-      priority: _this.props.task.priority
+      priority: _this.props.task.priority,
+      createdBy: _this.props.auth.googleId
     };
     return _this;
   }
@@ -43671,16 +43667,13 @@ var Task = function (_Component) {
           priority = _props$task.priority,
           name = _props$task.name,
           done = _props$task.done,
+          createdBy = _props$task.createdBy,
           isDone = _props.isDone,
           updateTask = _props.updateTask,
           deleteTask = _props.deleteTask,
           auth = _props.auth,
           i = _props.i;
 
-
-      console.log("===============TASK==================");
-      console.log(name, description);
-      console.log("====================================");
 
       return _react2.default.createElement(
         "div",
@@ -43741,6 +43734,16 @@ var Task = function (_Component) {
                 "Priority: "
               ),
               this.state.priority
+            ),
+            _react2.default.createElement(
+              "p",
+              null,
+              _react2.default.createElement(
+                "strong",
+                null,
+                "Created by: "
+              ),
+              this.state.createdBy
             ),
             _react2.default.createElement(
               "button",
@@ -43885,14 +43888,12 @@ var EditPage = function (_Component) {
 }(_react.Component);
 
 function mapStateToProps(state) {
-  return { task: state.task };
+  return { task: state.task, auth: state.auth };
 }
 
 function loadData(store, path) {
   var id = path.slice(0, 5);
-  console.log('================ID=================');
-  console.log(id);
-  console.log('====================================');
+
   return store.dispatch((0, _actions.fetchTask)(id));
 }
 
@@ -52302,9 +52303,6 @@ exports.default = function () {
 
   switch (action.type) {
     case _types.FETCH_TASK:
-      console.log('=============TASK====================');
-      console.log(action.payload);
-      console.log('====================================');
       return action.payload;
     default:
       return state;
@@ -52328,18 +52326,16 @@ exports.default = function () {
 
   switch (action.type) {
     case _types.FETCH_CURRENT_USER:
-      console.log("===========AUTH REDUCER======================");
-      console.log(action);
+      console.log("==========AUTH REDUCER=======================");
+      console.log(action.payload.data || false);
       console.log("====================================");
-      return [].concat(_toConsumableArray(state), [action.payload.data || false]);
+      return action.payload.data || false;
     default:
       return state;
   }
 };
 
 var _types = __webpack_require__(63);
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 /***/ }),
 /* 728 */

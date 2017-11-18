@@ -20,7 +20,8 @@ class Task extends Component {
       done: this.props.task.done,
       name: this.props.task.name,
       description: this.props.task.description,
-      priority: this.props.task.priority
+      priority: this.props.task.priority,
+      createdBy: this.props.auth.googleId
     };
   }
 
@@ -43,7 +44,7 @@ class Task extends Component {
 
   render() {
     const {
-      task: { id, description, priority, name, done },
+      task: { id, description, priority, name, done, createdBy },
       isDone,
       updateTask,
       deleteTask,
@@ -51,10 +52,6 @@ class Task extends Component {
       i
     } = this.props;
 
-    console.log("===============TASK==================");
-    console.log(name, description);
-    console.log("====================================");
-    
     return (
       <div className="row">
         <div className="col s12 m6 ">
@@ -93,6 +90,10 @@ class Task extends Component {
             <p className="flow-text">
               <strong>Priority: </strong>
               {this.state.priority}
+            </p>
+            <p>
+              <strong>Created by: </strong>
+              {this.state.createdBy}
             </p>
             <button className="btn">
               <input type="file" onChange={this.handleFileUpload.bind(this)} />

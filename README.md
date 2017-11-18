@@ -57,13 +57,32 @@ https://www.elastic.co/
 ### Features ###
 * Click on the task to change their status
 * Materialize - Modern styling
+* Server Renderer code using ES6
+* React + Redux
+* Auth with cookies
 
 # Performance #
 * Server Side Rendering: render data on the server and display content for the user as soon as possible
 * Easy to scale Server Renderer or Api Server - decoupled 
 
 ### Challenges ###
-* Time manage
+* Redux needs different configuration on the browser and on the server 
+* Aspects of authentication needs handle on the server - Normally this is only on the browser
+* Need state rehydration on the browser
+* Need to detect when all in initial data load action creators are completed
+* Time manage - been busy with work
+
+and most importantly 
+* not having a amazon S3 account -  They tried to verify my phone but the pin wasnt being processed
+I tried support but I havent got an answer yet - 
+Besides I tried to sign with another account and got the same error. 
+Maybe it's my phone. 
+
+### Recommend improvements ###
+* Redirect right away from Edit Page
+* Priority customization - User decides the range.
+* Edit task without routing
+* Created by can be user name - that's more suitable
 
 ### Code Structure ###
 
